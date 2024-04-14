@@ -1,3 +1,4 @@
+import 'package:campuscrave/admin/Adminside.dart';
 import 'package:campuscrave/firebase_options.dart';
 import 'package:campuscrave/screens/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,7 +16,14 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {        
-    return const MaterialApp(home: WelcomeScreen());
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Admin Side',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 199, 71, 71)),
+        useMaterial3: true,
+      ),
+      home: const AdminSide(),
+    );
   }
 }
