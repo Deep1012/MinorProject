@@ -17,8 +17,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
+<<<<<<< Updated upstream
   Widget build(BuildContext context) {        
     return const MaterialApp(home: LoginScreen());
+=======
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Admin Side',
