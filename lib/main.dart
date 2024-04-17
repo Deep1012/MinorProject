@@ -19,5 +19,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {        
     return const MaterialApp(home: LoginScreen());
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Admin Side',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 199, 71, 71)),
+        useMaterial3: true,
+      ),
+      home: const A(),
+    );
+>>>>>>> Stashed changes
   }
 }
