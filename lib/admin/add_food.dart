@@ -15,17 +15,16 @@ class AddFood extends StatefulWidget {
 }
 
 class _AddFoodState extends State<AddFood> {
-  final List<String> fooditems = ['Ice-cream', 'Burger', 'Salad', 'Pizza'];
+  final List<String> fooditems = ['Ice-cream', 'Burger', 'Salad', 'Pizza', ];
   String? value;
-  TextEditingController namecontroller = new TextEditingController();
-  TextEditingController pricecontroller = new TextEditingController();
-  TextEditingController detailcontroller = new TextEditingController();
+  TextEditingController namecontroller = TextEditingController();
+  TextEditingController pricecontroller = TextEditingController();
+  TextEditingController detailcontroller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   File? selectedImage;
 
   Future getImage() async {
     var image = await _picker.pickImage(source: ImageSource.gallery);
-
     selectedImage = File(image!.path);
     setState(() {});
   }
@@ -47,7 +46,7 @@ class _AddFoodState extends State<AddFood> {
         "Image": downloadUrl,
         "Name": namecontroller.text,
         "Price": pricecontroller.text,
-        "Detail": detailcontroller.text
+        "Detail": detailcontroller.text,
       };
       await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -59,6 +58,7 @@ class _AddFoodState extends State<AddFood> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

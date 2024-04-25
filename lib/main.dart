@@ -1,4 +1,12 @@
 import 'package:campuscrave/admin/Adminside.dart';
+import 'package:campuscrave/admin/add_food.dart';
+import 'package:campuscrave/admin/admin_bottomnav.dart';
+
+import 'package:campuscrave/admin/display.dart';
+import 'package:campuscrave/admin/display.dart';
+import 'package:campuscrave/admin/home_admin.dart';
+import 'package:campuscrave/admin/menu_view.dart';
+import 'package:campuscrave/admin/temp.dart';
 import 'package:campuscrave/firebase_options.dart';
 import 'package:campuscrave/screens/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 199, 71, 71)),
         useMaterial3: true,
       ),
-      home: const AdminSide(),
+      home: AdminBottomNav(),
     );
   }
 }
