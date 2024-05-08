@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person_outline_outlined),
                   labelText: "Full Name ",
-                  hintText: "Eg. Deep",
+                  hintText: "Eg. John Doe",
                   border: OutlineInputBorder()),
             ),
             const SizedBox(
