@@ -30,24 +30,28 @@ class _RateUsState extends State<RateUs> {
             ElevatedButton(
               onPressed: _rating != null ? _submitRating : null,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
                 child: Text(
                   'Submit',
                   style: TextStyle(fontSize: 18.0),
                 ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Background color
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Colors.white), // Background color
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0), // Rounded corners
+                    borderRadius:
+                        BorderRadius.circular(30.0), // Rounded corners
                   ),
                 ),
                 elevation: MaterialStateProperty.all<double>(5.0), // Shadow
                 overlayColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
                     if (states.contains(MaterialState.pressed))
-                      return Colors.deepPurpleAccent.withOpacity(0.5); // Change to accent color when pressed
+                      return Colors.deepPurpleAccent.withOpacity(
+                          0.5); // Change to accent color when pressed
                     return null; // Use the default overlay color
                   },
                 ),
@@ -77,7 +81,8 @@ class _RateUsState extends State<RateUs> {
       iconSize: _rating != null && index <= _rating! ? 45.0 : 40.0,
       icon: Icon(
         _rating == null || _rating! < index ? Icons.star_border : Icons.star,
-        color: _rating != null && index <= _rating! ? Colors.amber : Colors.grey,
+        color:
+            _rating != null && index <= _rating! ? Colors.amber : Colors.grey,
       ),
       onPressed: () => _setRating(index),
     );
@@ -96,7 +101,8 @@ class _RateUsState extends State<RateUs> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Thank You!'),
-            content: Text('Thank you for rating us $_rating stars! Your feedback is valuable to us.'),
+            content: Text(
+                'Thank you for rating us $_rating stars! Your feedback is valuable to us.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

@@ -40,7 +40,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       await _googleSignIn.signOut(); // Sign out of current Google session
 
-      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
@@ -50,7 +51,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           idToken: googleSignInAuthentication.idToken,
         );
 
-        final UserCredential userCredential = await _auth.signInWithCredential(credential);
+        final UserCredential userCredential =
+            await _auth.signInWithCredential(credential);
         final User? user = userCredential.user;
 
         if (user != null) {
@@ -94,7 +96,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // Perform registration logic
     // Replace with your registration logic
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -185,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     const Text("OR"),
                     const SizedBox(
-                      height: 0,
+                      height: 10,
                     ),
                     SizedBox(
                       height: 50,
@@ -212,6 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         );
                       },
+                      
                       child: const Text(
                         "Already have an account? Log In",
                         style: TextStyle(fontSize: 15, color: Colors.blue),
@@ -246,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_outlined),
                 labelText: "Full Name ",
-                hintText: "Eg. Deep",
+                hintText: "Eg. John Doe",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -286,7 +290,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: _togglePasswordVisibility,
-                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(_passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off),
                 ),
               ),
             ),
@@ -305,7 +311,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _register();
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                   backgroundColor: const Color.fromARGB(226, 0, 0, 0),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(

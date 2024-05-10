@@ -61,7 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AdminBottomNav()));
+                              builder: (context) => const AdminLogin()));
                     },
                     child: const Text(
                       "ADMIN",

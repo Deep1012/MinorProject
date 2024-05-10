@@ -134,7 +134,10 @@ class _FoodItemTileState extends State<FoodItemTile> {
   }
 
   void _updateDisplayStatus(bool newValue) {
-    FirebaseFirestore.instance.collection(widget.foodItem.reference.parent!.id).doc(widget.foodItem.id).update({
+    FirebaseFirestore.instance
+        .collection(widget.foodItem.reference.parent!.id)
+        .doc(widget.foodItem.id)
+        .update({
       'isDisplayed': newValue,
     });
   }

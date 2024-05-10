@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
 
   Stream? fooditemStream;
   ontheload() async {
-    fooditemStream = await DatabaseMethods().getFoodItem("Pizza");
+    fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Pizza");
     setState(() {});
   }
 
@@ -212,10 +212,10 @@ class _HomeState extends State<Home> {
                         //color: Colors.black,
                         borderRadius: BorderRadius.circular(8)),
                     child: Image.asset(
-                "images/nuvLogo.png",
-                height: 60,
-                width: 40,
-                fit: BoxFit.cover,
+                      "images/nuvLogo.png",
+                      height: 60,
+                      width: 40,
+                      fit: BoxFit.cover,
                     ),
                   )
                 ],
@@ -257,7 +257,8 @@ class _HomeState extends State<Home> {
             pizza = false;
             salad = false;
             burger = true;
-            fooditemStream = await DatabaseMethods().getFoodItem("Burger");
+            fooditemStream =
+                await DatabaseMethods().getDisplayedFoodItems("Burger");
             setState(() {});
           },
           child: Material(
@@ -269,7 +270,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
-                "images/lunch.png",
+                "images/burger.png",
                 height: 50,
                 width: 50,
                 fit: BoxFit.cover,
@@ -284,7 +285,8 @@ class _HomeState extends State<Home> {
             pizza = false;
             salad = true;
             burger = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Salad");
+            fooditemStream =
+                await DatabaseMethods().getDisplayedFoodItems("Salad");
             setState(() {});
           },
           child: Material(
@@ -296,7 +298,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
-                "images/south.png",
+                "images/salad.png",
                 height: 50,
                 width: 50,
                 fit: BoxFit.cover,
@@ -311,7 +313,8 @@ class _HomeState extends State<Home> {
             pizza = false;
             salad = false;
             burger = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Ice-cream");
+            fooditemStream =
+                await DatabaseMethods().getDisplayedFoodItems("Ice-cream");
             setState(() {});
           },
           child: Material(
@@ -323,7 +326,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
-                "images/pavbhaji.png",
+                "images/ice-cream.png",
                 height: 50,
                 width: 50,
                 fit: BoxFit.cover,
@@ -338,7 +341,8 @@ class _HomeState extends State<Home> {
             pizza = true;
             salad = false;
             burger = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Pizza");
+            fooditemStream =
+                await DatabaseMethods().getDisplayedFoodItems("Pizza");
             setState(() {});
           },
           child: Material(
@@ -350,7 +354,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
-                "images/wafer1.png",
+                "images/pizza.png",
                 height: 50,
                 width: 50,
                 fit: BoxFit.cover,
