@@ -220,54 +220,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                       const SizedBox(
-                        height: 30.0,
-                      ),
-                      
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(RateUs());
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Material(
-                            borderRadius: BorderRadius.circular(10),
-                            elevation: 2.0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 15.0,
-                                horizontal: 10.0,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    Icons.star_rate_rounded,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: 20.0,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Rate our app",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w600),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                       const SizedBox(
                         height: 30.0,
                       ),
