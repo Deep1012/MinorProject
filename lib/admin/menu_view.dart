@@ -117,7 +117,7 @@ class _FoodItemTileState extends State<FoodItemTile> {
           style: TextStyle(fontSize: 18),
         ),
         subtitle: Text(
-          'Price: \$${widget.foodItem['Price']}',
+          'Price: \₹${widget.foodItem['Price']}',
           style: TextStyle(fontSize: 16),
         ),
         trailing: Switch(
