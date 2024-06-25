@@ -139,7 +139,6 @@ class _LoginScreenState extends State<LoginScreen> {
       String? name = await SharedPreferenceHelper().getUserName();
       String? email = await SharedPreferenceHelper().getUserEmail();
 
-      // Update UI with the fetched data
       setState(() {
         // Update user profile and other data in the UI
         // For example:
