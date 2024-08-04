@@ -40,19 +40,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       await _googleSignIn.signOut(); // Sign out of current Google session
 
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
 
-        final UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
+        final UserCredential userCredential = await _auth.signInWithCredential(credential);
         final User? user = userCredential.user;
 
         if (user != null) {
@@ -96,8 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // Perform registration logic
     // Replace with your registration logic
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -111,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       );
 
-      String Id = randomAlphaNumeric(10);
+      String Id = randomAlphaNumeric(1000);
       Map<String, dynamic> addUserInfo = {
         "Name": nameController.text,
         "Email": emailController.text,
@@ -152,11 +148,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(20),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Padding(
+            padding: EdgeInsets.only(top: 70),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -180,9 +177,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 signinForm(),
+                const SizedBox(height: 10,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -206,6 +204,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -215,7 +216,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         );
                       },
-                      
                       child: const Text(
                         "Already have an account? Log In",
                         style: TextStyle(fontSize: 15, color: Colors.blue),
@@ -290,9 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: _togglePasswordVisibility,
-                  icon: Icon(_passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off),
+                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                 ),
               ),
             ),
@@ -311,8 +309,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _register();
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                   backgroundColor: const Color.fromARGB(226, 0, 0, 0),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(

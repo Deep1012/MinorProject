@@ -2,16 +2,10 @@ import 'package:campuscrave/services/database.dart';
 import 'package:campuscrave/services/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 
 class Details extends StatefulWidget {
   String image, name, detail, price;
-  Details(
-      {required this.detail,
-      required this.image,
-      required this.name,
-      required this.price});
+  Details({super.key, required this.detail, required this.image, required this.name, required this.price});
 
   @override
   State<Details> createState() => _DetailsState();
@@ -87,9 +81,7 @@ class _DetailsState extends State<Details> {
                     setState(() {});
                   },
                   child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
                     child: const Icon(
                       Icons.remove,
                       color: Colors.white,
@@ -113,9 +105,7 @@ class _DetailsState extends State<Details> {
                     setState(() {});
                   },
                   child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,
@@ -185,37 +175,30 @@ class _DetailsState extends State<Details> {
                         "Image": widget.image
                       };
                       await DatabaseMethods().addFoodToCart(addFoodtoCart, id!);
-                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: Colors.orangeAccent,
-              content: Text(
-                "Food Added to Cart",
-                style: TextStyle(fontSize: 18.0),
-              )));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          backgroundColor: Colors.orangeAccent,
+                          content: Text(
+                            "Food Added to Cart",
+                            style: TextStyle(fontSize: 18.0),
+                          )));
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width / 2,
                       padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Text(
                             "Add to cart",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontFamily: 'Poppins'),
+                            style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'Poppins'),
                           ),
                           const SizedBox(
                             width: 30.0,
                           ),
                           Container(
                             padding: const EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(8)),
+                            decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(8)),
                             child: const Icon(
                               Icons.shopping_cart_outlined,
                               color: Colors.white,

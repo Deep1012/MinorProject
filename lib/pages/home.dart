@@ -1,8 +1,8 @@
 import 'package:campuscrave/pages/details.dart';
 import 'package:campuscrave/services/database.dart';
+import 'package:campuscrave/services/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,8 +17,16 @@ class _HomeState extends State<Home> {
   bool icecream = false, pizza = false, salad = false, burger = false;
 
   Stream? fooditemStream;
+  String? name;
+
+  getthesharedpref() async {
+    name = await SharedPreferenceHelper().getUserName();
+    setState(() {});
+  }
+
   ontheload() async {
     fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Pizza");
+    getthesharedpref();
     setState(() {});
   }
 
@@ -77,37 +85,28 @@ class _HomeState extends State<Home> {
                                 Column(
                                   children: [
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2,
+                                        width: MediaQuery.of(context).size.width / 2,
                                         child: Text(
                                           ds["Name"],
-                                          style: AppWidget
-                                              .semiBoldTextFieldStyle(),
+                                          style: AppWidget.semiBoldTextFieldStyle(),
                                         )),
                                     const SizedBox(
                                       height: 5.0,
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2,
+                                        width: MediaQuery.of(context).size.width / 2,
                                         child: Text(
                                           ds["Detail"],
-                                          style:
-                                              AppWidget.LightTextFieldStyle(),
+                                          style: AppWidget.LightTextFieldStyle(),
                                         )),
                                     const SizedBox(
                                       height: 5.0,
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2,
+                                        width: MediaQuery.of(context).size.width / 2,
                                         child: Text(
                                           "\₹" + ds["Price"],
-                                          style: AppWidget
-                                              .semiBoldTextFieldStyle(),
+                                          style: AppWidget.semiBoldTextFieldStyle(),
                                         ))
                                   ],
                                 )
@@ -119,7 +118,7 @@ class _HomeState extends State<Home> {
                     );
                   },
                 )
-              : Center(child: const CircularProgressIndicator());
+              : const Center(child: CircularProgressIndicator());
         });
   }
 
@@ -154,41 +153,36 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
                             padding: const EdgeInsets.all(14),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.network(
-                                      ds["Image"],
-                                      height: 150,
-                                      width: 150,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Text(ds["Name"],
-                                      style:
-                                          AppWidget.semiBoldTextFieldStyle()),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(ds["Detail"],
-                                      style: AppWidget.LightTextFieldStyle()),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(
-                                    "\₹" + ds["Price"],
-                                    style: AppWidget.semiBoldTextFieldStyle(),
-                                  )
-                                ]),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(
+                                  ds["Image"],
+                                  height: 150,
+                                  width: 150,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Text(ds["Name"], style: AppWidget.semiBoldTextFieldStyle()),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(ds["Detail"], style: AppWidget.LightTextFieldStyle()),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                "\₹" + ds["Price"],
+                                style: AppWidget.semiBoldTextFieldStyle(),
+                              )
+                            ]),
                           ),
                         ),
                       ),
                     );
                   },
                 )
-              : Center(child: const CircularProgressIndicator());
+              : const Center(child: CircularProgressIndicator());
         });
   }
 
@@ -204,9 +198,13 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Hello peeps,", style: AppWidget.boldTextFieldStyle()),
+                  name == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Text("Welcome " + name! + "!!", style: AppWidget.boldTextFieldStyle())),
                   Container(
-                    margin: const EdgeInsets.only(right: 20.0),
+                    margin: const EdgeInsets.only(right: 30.0, top: 20),
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
                         //color: Colors.black,
@@ -223,21 +221,19 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 20.0,
               ),
-              Text("Delicious Food", style: AppWidget.HeadTextFieldStyle()),
-              Text("Discover and Get Great Food",
-                  style: AppWidget.LightTextFieldStyle()),
+              Text("NUV Canteen", style: AppWidget.HeadTextFieldStyle()),
+              Text("Order beforehand to skip the wait!!", style: AppWidget.LightTextFieldStyle()),
               const SizedBox(
                 height: 20.0,
               ),
-              Container(
-                  margin: const EdgeInsets.only(right: 20.0),
-                  child: showItem()),
+              
+              Container(margin: const EdgeInsets.only(right: 20.0), child: showItem()),
               const SizedBox(
                 height: 30.0,
               ),
               Container(height: 270, child: allItems()),
               const SizedBox(
-                height: 30.0,
+                height: 20.0,
               ),
               allItemsVertically(),
             ],
@@ -257,17 +253,14 @@ class _HomeState extends State<Home> {
             pizza = false;
             salad = false;
             burger = true;
-            fooditemStream =
-                await DatabaseMethods().getDisplayedFoodItems("Burger");
+            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Burger");
             setState(() {});
           },
           child: Material(
             elevation: 5.0,
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              decoration: BoxDecoration(
-                  color: burger ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: burger ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
                 "images/burger.png",
@@ -285,17 +278,14 @@ class _HomeState extends State<Home> {
             pizza = false;
             salad = true;
             burger = false;
-            fooditemStream =
-                await DatabaseMethods().getDisplayedFoodItems("Salad");
+            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Salad");
             setState(() {});
           },
           child: Material(
             elevation: 5.0,
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              decoration: BoxDecoration(
-                  color: salad ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: salad ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
                 "images/salad.png",
@@ -313,17 +303,14 @@ class _HomeState extends State<Home> {
             pizza = false;
             salad = false;
             burger = false;
-            fooditemStream =
-                await DatabaseMethods().getDisplayedFoodItems("Ice-cream");
+            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Ice-cream");
             setState(() {});
           },
           child: Material(
             elevation: 5.0,
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              decoration: BoxDecoration(
-                  color: icecream ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: icecream ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
                 "images/ice-cream.png",
@@ -341,17 +328,14 @@ class _HomeState extends State<Home> {
             pizza = true;
             salad = false;
             burger = false;
-            fooditemStream =
-                await DatabaseMethods().getDisplayedFoodItems("Pizza");
+            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Pizza");
             setState(() {});
           },
           child: Material(
             elevation: 5.0,
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              decoration: BoxDecoration(
-                  color: pizza ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: pizza ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
                 "images/pizza.png",

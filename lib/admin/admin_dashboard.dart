@@ -1,8 +1,10 @@
-import 'package:campuscrave/admin/add_food.dart';
+import 'package:campuscrave/admin/admin_addFood.dart';
+import 'package:campuscrave/admin/admin_completedOrders.dart';
 import 'package:campuscrave/services/database.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -44,46 +46,48 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Dashboard",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue[900],
-                ),
+    return Padding(
+        padding: const EdgeInsets.only(top: 50),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Dashboard",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 11, 11, 11),
+                    ),
+                  ),
+                  const SizedBox(height: 30.0),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    padding: const EdgeInsets.only(top: 12.0),
+                    itemCount: _dashboardItem.length,
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 230,
+                      mainAxisSpacing: 20.0,
+                      crossAxisSpacing: 20.0,
+                      childAspectRatio: 1.0,
+                    ),
+                    itemBuilder: (context, index) {
+                      return _buildGridItem(
+                        title: _dashboardItem[index]['title'],
+                        subtitle: _dashboardItem[index]['subtitle'],
+                        icon: _dashboardItem[index]['icon'],
+                      );
+                    },
+                  ),
+                ],
               ),
-              const SizedBox(height: 30.0),
-              GridView.builder(
-                shrinkWrap: true,
-                primary: false,
-                padding: const EdgeInsets.only(top: 12.0),
-                itemCount: _dashboardItem.length,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 230,
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 20.0,
-                  childAspectRatio: 1.0,
-                ),
-                itemBuilder: (context, index) {
-                  return _buildGridItem(
-                    title: _dashboardItem[index]['title'],
-                    subtitle: _dashboardItem[index]['subtitle'],
-                    icon: _dashboardItem[index]['icon'],
-                  );
-                },
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildGridItem({required String title, required String subtitle, required IconData icon}) {
@@ -119,7 +123,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   size: 40,
                   color: Colors.white,
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height:20.0),
                 Text(
                   title,
                   style: const TextStyle(
@@ -167,7 +171,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   size: 40,
                   color: Colors.white,
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 20.0),
                 Text(
                   title,
                   style: const TextStyle(
@@ -196,11 +200,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Card(
       elevation: 10.0,
       child: Material(
+        
         color: Colors.blue[900],
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
+          
           borderRadius: BorderRadius.circular(10),
           onTap: () {
+            if ('$title' == "Completed Orders") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const CompletedOrdersPage()));
+            }
+
             // Handle the tap event here
             print('Tapped item: $title');
             // You can navigate to a new screen or perform any other action
@@ -209,15 +219,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   icon,
                   size: 40,
                   color: Colors.white,
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 20.0),
                 Text(
                   title,
+                  
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -260,6 +272,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
       "title": "Earnings",
       "subtitle": "\$600",
       "icon": Icons.attach_money,
+    },
+    {
+      "title": "Completed Orders",
+      "subtitle": "",
+      "icon": Icons.food_bank,
     },
   ];
 }

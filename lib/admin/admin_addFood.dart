@@ -34,7 +34,7 @@ class _AddFoodState extends State<AddFood> {
         namecontroller.text != "" &&
         pricecontroller.text != "" &&
         detailcontroller.text != "") {
-      String addId = randomAlphaNumeric(10);
+      String addId = randomAlphaNumeric(100);
 
       Reference firebaseStorageRef =
           FirebaseStorage.instance.ref().child("Images").child(addId);
@@ -47,10 +47,11 @@ class _AddFoodState extends State<AddFood> {
         "Name": namecontroller.text,
         "Price": pricecontroller.text,
         "Detail": detailcontroller.text,
+        "isDisplayed" : true
       };
       await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Color.fromARGB(255, 117, 241, 138),
             content: Text(
               "Food Item has been added Successfully",
               style: TextStyle(fontSize: 18.0),

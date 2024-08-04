@@ -37,19 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _googleSignIn.signOut(); // Sign out of current Google session
 
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
 
-        final UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
+        final UserCredential userCredential = await _auth.signInWithCredential(credential);
         final User? user = userCredential.user;
 
         if (user != null) {
@@ -64,8 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await getthesharedpref();
 
           // Save user profile data to shared preferences
-          await SharedPreferenceHelper()
-              .saveUserProfile('Updated profile data');
+          await SharedPreferenceHelper().saveUserProfile('Updated profile data');
 
           // Navigate to the home page after successful sign-in
           Navigator.pushReplacement(
@@ -93,8 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   userLogin() async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
 
       // Fetch user profile and other data after successful login
       await getthesharedpref();
@@ -102,8 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Save user profile data to shared preferences
       await SharedPreferenceHelper().saveUserProfile('Updated profile data');
 
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const BottomNav()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNav()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -154,9 +148,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: 70),
           child: Container(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -167,6 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 300,
                   height: 270,
                 ),
+                SizedBox(height: 20,),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -181,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 0),
                 loginForm(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -204,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20,),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -267,9 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: _togglePasswordVisibility,
-                  icon: Icon(_passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off),
+                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                 ),
               ),
             ),
@@ -307,8 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                   backgroundColor: const Color.fromARGB(226, 0, 0, 0),
                   foregroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(

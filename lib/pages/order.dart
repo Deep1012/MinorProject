@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io'; // Import for platform detection
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:campuscrave/services/database.dart';
@@ -8,6 +10,9 @@ import 'package:campuscrave/services/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'success.dart';
+import 'package:intl/intl.dart';
+
+final formatter = DateFormat.yMd();
 
 class Order extends StatefulWidget {
   const Order({Key? key}) : super(key: key);
@@ -15,6 +20,7 @@ class Order extends StatefulWidget {
   @override
   State<Order> createState() => _OrderState();
 }
+
 class GenerateCode {
   late String code;
 
@@ -26,9 +32,16 @@ class GenerateCode {
 
 class _OrderState extends State<Order> {
   String? id;
+  String? username;
+  String? name;
   int total = 0;
+  final now = DateTime.now();
   var _razorpay = Razorpay();
-  late String orderCode; // Store the order code
+  late String orderCode;
+
+  // List to keep track of dismissed items
+  final List<DocumentSnapshot> _dismissedItems = [];
+  late Stream foodStream;
 
   void startTimer() {
     Timer(const Duration(seconds: 1), () {
@@ -38,14 +51,21 @@ class _OrderState extends State<Order> {
 
   getthesharedpref() async {
     id = await SharedPreferenceHelper().getUserId();
+    username = await SharedPreferenceHelper().getUserName();
     setState(() {});
   }
 
-  ontheload() async {
-    await getthesharedpref();
-    foodStream = await DatabaseMethods().getFoodCart(id!);
-    setState(() {});
+  void ontheload() async {
+    try {
+      await getthesharedpref();
+      foodStream = (await DatabaseMethods().getFoodCart(id!))!;
+      setState(() {});
+    } catch (e) {
+      print('Error loading data: $e');
+      // Optionally, show an error message to the user
+    }
   }
+
 
   @override
   void initState() {
@@ -58,129 +78,230 @@ class _OrderState extends State<Order> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    // Place the order when payment succeeds
-    placeOrder(orderCode); 
-        GenerateCode();
-// Pass the order code
-    Get.to(
-        Success(userId: id!, orderCode: orderCode)); // Pass the order code to Success page
+    placeOrder(orderCode);
+    StoreOrder(orderCode);
+    GenerateCode();
+    Get.to(() => Success(userId: id!, orderCode: orderCode));
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    // Do something when payment fails
+    // Handle payment error
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    // Do something when an external wallet is selected
+    // Handle external wallet
   }
 
   @override
   void dispose() {
     super.dispose();
-    _razorpay.clear(); // Removes all listeners
+    _razorpay.clear();
   }
 
-  Stream? foodStream;
+  Future<void> _deleteItemFromCart(DocumentSnapshot item) async {
+    try {
+      _dismissedItems.add(item); // Keep track of dismissed items
+      total -= int.parse(item["Total"]); // Deduct the item's total from the overall total
+      setState(() {}); // Trigger a UI update
+      await FirebaseFirestore.instance.collection("Users").doc(id!).collection("Cart").doc(item.id).delete();
+    } catch (e) {
+      print('Failed to delete item: $e');
+    }
+  }
+
+
+  Future<void> _restoreItem(DocumentSnapshot item) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(id!)
+          .collection("Cart")
+          .doc(item.id)
+          .set(item.data() as Map<String, dynamic>);
+
+      setState(() {
+        _dismissedItems.remove(item); // Remove item from the temporary list
+      });
+    } catch (e) {
+      print('Failed to restore item: $e');
+    }
+  }
+
+
+  Future<bool?> _showConfirmationDialog() async {
+    if (Platform.isIOS) {
+      return await showCupertinoDialog<bool>(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: Text('Confirm Removal'),
+              content: Text('Are you sure you want to remove this item from the cart?'),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Cancel'),
+                ),
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Remove'),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+    } else {
+      return await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Confirm Removal'),
+              content: Text('Are you sure you want to remove this item from the cart?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Remove'),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+    }
+  }
 
   Widget foodCart() {
     return StreamBuilder(
       stream: foodStream,
       builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: snapshot.data.docs.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
-                  total = total + int.parse(ds["Total"]);
-                  return Container(
-                    margin: const EdgeInsets.only(
-                      left: 20.0,
-                      right: 20.0,
-                      bottom: 10.0,
-                    ),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    // Decrement action
-                                  },
-                                  icon: Icon(Icons.remove),
+        if (snapshot.hasData) {
+          total = 0; // Reset total before recalculating
+          return ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: snapshot.data.docs.length,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              DocumentSnapshot ds = snapshot.data.docs[index];
+              total += int.parse(ds["Total"]); // Accumulate the total price
+
+              return Dismissible(
+                key: ValueKey(ds.id),
+                direction: DismissDirection.endToStart,
+                confirmDismiss: (direction) async {
+                  final result = await _showConfirmationDialog();
+                  if (result == true) {
+                    await _deleteItemFromCart(ds);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Item removed from cart')),
+                    );
+                    return true;
+                  } else {
+                    // Restore the item if cancellation is chosen
+                    await _restoreItem(ds);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Item restored')),
+                    );
+                    return false;
+                  }
+                },
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Icon(Icons.delete, color: Colors.white),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    left: 20.0,
+                    right: 20.0,
+                    bottom: 10.0,
+                  ),
+                  child: Material(
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(60),
+                                child: Image.network(
+                                  ds["Image"],
+                                  height: 90,
+                                  width: 90,
+                                  fit: BoxFit.cover,
                                 ),
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(10),
+                              ),
+                              const SizedBox(
+                                width: 50,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 10.0,
                                   ),
-                                  child: Center(
-                                    child: Text(ds["Quantity"]),
+                                  Text(
+                                    ds["Name"],
+                                    style: AppWidget.semiBoldTextFieldStyle(),
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    // Increment action
-                                  },
-                                  icon: Icon(Icons.add),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(60),
-                                  child: Image.network(
-                                    ds["Image"],
-                                    height: 90,
-                                    width: 90,
-                                    fit: BoxFit.cover,
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "\₹" + ds["Total"],
+                                    style: AppWidget.semiBoldTextFieldStyle(),
                                   ),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 1,
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // Decrement action
+                                },
+                                icon: Icon(Icons.remove),
+                              ),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                const SizedBox(
-                                  height: 10.0,
+                                child: Center(
+                                  child: Text(ds["Quantity"]),
                                 ),
-                                Text(
-                                  ds["Name"],
-                                  style: AppWidget.semiBoldTextFieldStyle(),
-                                ),
-                                Text(
-                                  "\₹" + ds["Total"],
-                                  style: AppWidget.semiBoldTextFieldStyle(),
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                // Delete action
-                              },
-                              icon: Icon(Icons.delete),
-                            ),
-                          ],
-                        ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // Increment action
+                                },
+                                icon: Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              )
-            : Center(child: const CircularProgressIndicator());
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return Center(child: const CircularProgressIndicator());
+        }
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -202,9 +323,7 @@ class _OrderState extends State<Order> {
             const SizedBox(
               height: 20.0,
             ),
-            Container(
-                height: MediaQuery.of(context).size.height / 2,
-                child: foodCart()),
+            Container(height: MediaQuery.of(context).size.height / 2, child: foodCart()),
             const Spacer(),
             const Divider(),
             Padding(
@@ -228,13 +347,10 @@ class _OrderState extends State<Order> {
             ),
             GestureDetector(
               onTap: () {
-                // Initiate Razorpay payment
-                orderCode =
-                    '${Random().nextInt(9999)}'; // Generate order code
+                orderCode = '${Random().nextInt(9999)}';
                 var options = {
                   'key': 'rzp_test_YX11pZyfLyoM43',
-                  'amount':
-                      (total / 2) * 100, // Amount in smallest currency unit
+                  'amount': (total) * 100,
                   'name': 'Canteen',
                   'order': {
                     "id": orderCode,
@@ -255,18 +371,12 @@ class _OrderState extends State<Order> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10)),
-                margin: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, bottom: 20.0),
+                decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
                 child: const Center(
                     child: Text(
                   "CheckOut",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
                 )),
               ),
             )
@@ -275,30 +385,43 @@ class _OrderState extends State<Order> {
       ),
     );
   }
-var code1 = GenerateCode();
 
-  // Function to place the order
+  var code1 = GenerateCode();
+
   void placeOrder(String orderCode) async {
     if (id != null) {
       var items = <Map<String, dynamic>>[];
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(id!)
-          .collection("Cart")
-          .get()
-          .then((querySnapshot) {
+      await FirebaseFirestore.instance.collection("Users").doc(id!).collection("Cart").get().then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           items.add({
             'itemName': doc['Name'],
             'quantity': doc['Quantity'],
             'total': doc['Total'],
-            // Add more fields as needed
           });
         });
       });
 
       if (items.isNotEmpty) {
-        await DatabaseMethods().placeOrder(id!, orderCode, total, items, code1.code);
+        await DatabaseMethods().placeOrder(now, id!, orderCode, total, items, code1.code);
+      }
+    }
+  }
+
+  void StoreOrder(String orderCode) async {
+    if (id != null) {
+      var Storeitems = <Map<String, dynamic>>[];
+      await FirebaseFirestore.instance.collection("Users").doc(id!).collection("Cart").get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          Storeitems.add({
+            'itemName': doc['Name'],
+            'quantity': doc['Quantity'],
+            'total': doc['Total'],
+          });
+        });
+      });
+
+      if (Storeitems.isNotEmpty) {
+        await DatabaseMethods().StoreOrder(now, id!, orderCode, total, Storeitems, code1.code);
       }
     }
   }

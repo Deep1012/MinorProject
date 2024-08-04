@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:campuscrave/admin/add_food.dart';
-import 'package:campuscrave/admin/menu_view.dart';
-import 'package:campuscrave/widgets/widget_support.dart';
+import 'package:campuscrave/admin/admin_addFood.dart';
+import 'package:campuscrave/admin/admin_menu.dart';
 
 class HomeAdmin extends StatelessWidget {
   const HomeAdmin({Key? key}) : super(key: key);
@@ -11,52 +10,61 @@ class HomeAdmin extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(height: 70.0),
-                Text(
-                  "Navrachana Canteen",
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 60.0),
+                  const Padding(
+                    padding:  EdgeInsets.only(left: 20.0, top: 20),
+                    child: Text(
+                      "Navrachana Canteen",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 70.0),
-                Image.asset(
-                  "images/nuvLogo.png",
-                  height: 60,
-                  width: 40,
-                  fit: BoxFit.cover,
-                ),
-              ],
-            ),
-            const SizedBox(height: 70.0),
-            buildMenuCard(
-              image: "images/add_food.jpeg",
-              title: "+ Add Food Items",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddFood()),
-                );
-              },
-            ),
-            const SizedBox(height: 40.0),
-            buildMenuCard(
-              image: "images/menu.jpg",
-              title: "View Menu Card",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MenuViewPage()),
-                );
-              },
-            ),
-          ],
+                  const SizedBox(width: 50.0),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0, top: 10),
+                    child: Image.asset(
+                      "images/nuvLogo.png",
+                      height: 60,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 90.0),
+              buildMenuCard(
+                image: "images/add_food.jpeg",
+                title: "+ Add Food Items",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddFood()),
+                  );
+                },
+              ),
+              const SizedBox(height: 40.0),
+              buildMenuCard(
+                image: "images/menu.jpg",
+                title: "View Menu Card",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MenuViewPage()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -110,13 +118,13 @@ class HomeAdmin extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.arrow_forward,
                         color: Colors.white,
                       ),

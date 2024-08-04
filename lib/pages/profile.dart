@@ -177,7 +177,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(RateUs());
+                        Get.to(() => RateUs());
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -225,7 +225,7 @@ class _ProfileState extends State<Profile> {
                     GestureDetector(
                       onTap: () {
                         AuthMethods().deleteuser();
-                        Get.to(LoginScreen());
+                        Get.to(() => LoginScreen());
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -273,7 +273,7 @@ class _ProfileState extends State<Profile> {
                     GestureDetector(
                       onTap: () {
                         AuthMethods().SignOut();
-                        Get.to(LoginScreen());
+                        Get.to(() => LoginScreen());
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20.0),

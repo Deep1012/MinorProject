@@ -35,7 +35,7 @@ class OnBoardingController extends GetxController {
 
       storage.write('IsFirstTime', false);
 
-      Get.offAll(const WelcomeScreen());
+      Get.offAll(() => const WelcomeScreen());
     } else {
       int page = currentPageIndex.value + 1;
       pageController.jumpToPage(page);
@@ -44,7 +44,7 @@ class OnBoardingController extends GetxController {
   void skipPage(){
     //currentPageIndex.value=2;
     //pageController.jumpToPage(2);
-    Get.to(WelcomeScreen());
+    Get.to(() => WelcomeScreen());
 
   }
 }

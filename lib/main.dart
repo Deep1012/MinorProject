@@ -31,8 +31,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: const Scaffold(
+    return const GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      home:  Scaffold(
           backgroundColor: CCcolors.primary,
           body: Center(child: CircularProgressIndicator(color: Colors.white))),
     );
