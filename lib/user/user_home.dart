@@ -40,85 +40,83 @@ class _HomeState extends State<Home> {
     return StreamBuilder(
         stream: fooditemStream,
         builder: (context, AsyncSnapshot snapshot) {
-          return snapshot.hasData
-              ? ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: snapshot.data.docs.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data.docs[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Details(
-                                      detail: ds["Detail"],
-                                      image: ds["Image"],
-                                      name: ds["Name"],
-                                      price: ds["Price"],
-                                    )));
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 20.0, bottom: 20),
-                        child: Material(
-                          elevation: 5.0,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(
-                                    ds["Image"],
-                                    height: 120,
-                                    width: 120,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20.0,
-                                ),
-                                Column(
-                                  children: [
-                                    Container(
-                                        width: MediaQuery.of(context).size.width / 2,
-                                        child: Text(
-                                          ds["Name"],
-                                          style: AppWidget.semiBoldTextFieldStyle(),
-                                        )),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Container(
-                                        width: MediaQuery.of(context).size.width / 2,
-                                        child: Text(
-                                          ds["Detail"],
-                                          style: AppWidget.LightTextFieldStyle(),
-                                        )),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Container(
-                                        width: MediaQuery.of(context).size.width / 2,
-                                        child: Text(
-                                          "\₹" + ds["Price"],
-                                          style: AppWidget.semiBoldTextFieldStyle(),
-                                        ))
-                                  ],
-                                )
-                              ],
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: snapshot.data.docs.length,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              DocumentSnapshot ds = snapshot.data.docs[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Details(
+                        detail: ds["Detail"],
+                        image: ds["Image"],
+                        name: ds["Name"],
+                        price: ds["Price"],
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 20.0, bottom: 20),
+                  child: Material(
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              ds["Image"],
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  ds["Name"],
+                                  style: AppWidget.semiBoldTextFieldStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  ds["Detail"],
+                                  style: AppWidget.LightTextFieldStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "\₹${ds["Price"]}",
+                                  style: AppWidget.semiBoldTextFieldStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    );
-                  },
-                )
-              : const Center(child: CircularProgressIndicator());
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
         });
   }
 
@@ -126,228 +124,184 @@ class _HomeState extends State<Home> {
     return StreamBuilder(
         stream: fooditemStream,
         builder: (context, AsyncSnapshot snapshot) {
-          return snapshot.hasData
-              ? ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: snapshot.data.docs.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data.docs[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Details(
-                                      detail: ds["Detail"],
-                                      image: ds["Image"],
-                                      name: ds["Name"],
-                                      price: ds["Price"],
-                                    )));
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(4),
-                        child: Material(
-                          elevation: 5.0,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.all(14),
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.network(
-                                  ds["Image"],
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(ds["Name"], style: AppWidget.semiBoldTextFieldStyle()),
-                              const SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(ds["Detail"], style: AppWidget.LightTextFieldStyle()),
-                              const SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "\₹" + ds["Price"],
-                                style: AppWidget.semiBoldTextFieldStyle(),
-                              )
-                            ]),
-                          ),
-                        ),
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: snapshot.data.docs.length,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              DocumentSnapshot ds = snapshot.data.docs[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Details(
+                        detail: ds["Detail"],
+                        image: ds["Image"],
+                        name: ds["Name"],
+                        price: ds["Price"],
                       ),
-                    );
-                  },
-                )
-              : const Center(child: CircularProgressIndicator());
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(4),
+                  child: Material(
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              ds["Image"],
+                              height: 120,
+                              width: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Text(
+                            ds["Name"],
+                            style: AppWidget.semiBoldTextFieldStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            ds["Detail"],
+                            style: AppWidget.LightTextFieldStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 15),
+                          Text(
+                            "\₹${ds["Price"]}",
+                            style: AppWidget.semiBoldTextFieldStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      body:  SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(top: 50.0, left: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    name == null
-                        ? const Center(child: CircularProgressIndicator())
-                        : Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: Text("Welcome " + name! + "!!", style: AppWidget.boldTextFieldStyle())),
-                    Container(
-                      margin: const EdgeInsets.only(right: 30.0, top: 20),
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          //color: Colors.black,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Image.asset(
-                        "images/nuvLogo.png",
-                        height: 60,
-                        width: 40,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Text("NUV Canteen", style: AppWidget.HeadTextFieldStyle()),
-                Text("Order beforehand to skip the wait!!", style: AppWidget.LightTextFieldStyle()),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                
-                Container(margin: const EdgeInsets.only(right: 20.0), child: showItem()),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                Container(height: 270, child: allItems()),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                allItemsVertically(),
-              ],
-            ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(top: 50.0, left: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  name == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Text(
+                            "Welcome $name!!",
+                            style: AppWidget.boldTextFieldStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 30.0, top: 20),
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Image.asset(
+                      "images/nuvLogo.png",
+                      height: 60,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              Text(
+                "NUV Canteen",
+                style: AppWidget.HeadTextFieldStyle(),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                "Order beforehand to skip the wait!!",
+                style: AppWidget.LightTextFieldStyle(),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 20.0),
+              Container(margin: const EdgeInsets.only(right: 20.0), child: showItem()),
+              const SizedBox(height: 30.0),
+              SizedBox(height: 270, child: allItems()),
+              const SizedBox(height: 20.0),
+              allItemsVertically(),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
   Widget showItem() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
-          onTap: () async {
-            icecream = false;
-            pizza = false;
-            salad = false;
-            burger = true;
-            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Burger");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(color: burger ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.all(8),
-              child: Image.asset(
-                "images/burger.png",
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
-                color: burger ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            icecream = false;
-            pizza = false;
-            salad = true;
-            burger = false;
-            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Salad");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(color: salad ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.all(8),
-              child: Image.asset(
-                "images/salad.png",
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
-                color: salad ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            icecream = true;
-            pizza = false;
-            salad = false;
-            burger = false;
-            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Ice-cream");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(color: icecream ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.all(8),
-              child: Image.asset(
-                "images/ice-cream.png",
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
-                color: icecream ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            icecream = false;
-            pizza = true;
-            salad = false;
-            burger = false;
-            fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Pizza");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(color: pizza ? Colors.black : Colors.white, borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.all(8),
-              child: Image.asset(
-                "images/pizza.png",
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
-                color: pizza ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        ),
+        foodCategoryItem("Burger", "images/burger.png", burger),
+        foodCategoryItem("Salad", "images/salad.png", salad),
+        foodCategoryItem("Ice-cream", "images/ice-cream.png", icecream),
+        foodCategoryItem("Pizza", "images/pizza.png", pizza),
       ],
+    );
+  }
+
+  Widget foodCategoryItem(String category, String asset, bool isSelected) {
+    return GestureDetector(
+      onTap: () async {
+        setState(() {
+          icecream = category == "Ice-cream";
+          pizza = category == "Pizza";
+          salad = category == "Salad";
+          burger = category == "Burger";
+        });
+        fooditemStream = await DatabaseMethods().getDisplayedFoodItems(category);
+        setState(() {});
+      },
+      child: Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.black : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Image.asset(
+            asset,
+            height: 50,
+            width: 50,
+            fit: BoxFit.cover,
+            color: isSelected ? Colors.white : Colors.black,
+          ),
+        ),
+      ),
     );
   }
 }
