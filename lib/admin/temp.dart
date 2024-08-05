@@ -1,4 +1,4 @@
-import 'package:campuscrave/pages/details.dart';
+import 'package:campuscrave/pages/user_foodDetail.dart';
 import 'package:campuscrave/services/database.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

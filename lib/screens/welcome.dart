@@ -9,7 +9,8 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
+      
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(20),

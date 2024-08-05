@@ -207,7 +207,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            if ('$title' == "Completed Orders") {
+            if ('$title' == "Completed") {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const CompletedOrdersPage()));
             }
 
@@ -274,7 +274,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       "icon": Icons.attach_money,
     },
     {
-      "title": "Completed Orders",
+      "title": "Completed",
       "subtitle": "",
       "icon": Icons.food_bank,
     },

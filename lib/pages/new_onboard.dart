@@ -15,6 +15,7 @@ class NewOnboard extends StatelessWidget {
 
 
     return Scaffold(
+      backgroundColor: Color(0xffffffff),
       body: Stack(
         children: [
           /// Horizontal Scrollable Pages

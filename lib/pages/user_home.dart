@@ -1,4 +1,4 @@
-import 'package:campuscrave/pages/details.dart';
+import 'package:campuscrave/pages/user_foodDetail.dart';
 import 'package:campuscrave/services/database.dart';
 import 'package:campuscrave/services/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
@@ -189,58 +189,58 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(top: 50.0, left: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  name == null
-                      ? const Center(child: CircularProgressIndicator())
-                      : Padding(
-                          padding: EdgeInsets.only(top: 30),
-                          child: Text("Welcome " + name! + "!!", style: AppWidget.boldTextFieldStyle())),
-                  Container(
-                    margin: const EdgeInsets.only(right: 30.0, top: 20),
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                        //color: Colors.black,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Image.asset(
-                      "images/nuvLogo.png",
-                      height: 60,
-                      width: 40,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Text("NUV Canteen", style: AppWidget.HeadTextFieldStyle()),
-              Text("Order beforehand to skip the wait!!", style: AppWidget.LightTextFieldStyle()),
-              const SizedBox(
-                height: 20.0,
-              ),
-              
-              Container(margin: const EdgeInsets.only(right: 20.0), child: showItem()),
-              const SizedBox(
-                height: 30.0,
-              ),
-              Container(height: 270, child: allItems()),
-              const SizedBox(
-                height: 20.0,
-              ),
-              allItemsVertically(),
-            ],
+      body:  SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(top: 50.0, left: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    name == null
+                        ? const Center(child: CircularProgressIndicator())
+                        : Padding(
+                            padding: EdgeInsets.only(top: 30),
+                            child: Text("Welcome " + name! + "!!", style: AppWidget.boldTextFieldStyle())),
+                    Container(
+                      margin: const EdgeInsets.only(right: 30.0, top: 20),
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                          //color: Colors.black,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Image.asset(
+                        "images/nuvLogo.png",
+                        height: 60,
+                        width: 40,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Text("NUV Canteen", style: AppWidget.HeadTextFieldStyle()),
+                Text("Order beforehand to skip the wait!!", style: AppWidget.LightTextFieldStyle()),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                
+                Container(margin: const EdgeInsets.only(right: 20.0), child: showItem()),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                Container(height: 270, child: allItems()),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                allItemsVertically(),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget showItem() {

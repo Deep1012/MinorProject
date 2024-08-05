@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:campuscrave/pages/bottomnav.dart';
+import 'package:campuscrave/pages/user_bottomnav.dart';
 import 'package:campuscrave/screens/login_screen.dart';
 import 'package:campuscrave/services/database.dart';
 import 'package:campuscrave/services/shared_pref.dart';

@@ -145,36 +145,39 @@ class _AdminOrdersState extends State<AdminOrders> {
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(16),
-                      child: Row(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute space between children
                           children: [
-                            Text(
-                              'Order ID: ${order['OrderID']}',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Order ID: ${order['OrderID']}',
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text('Name: ${order['itemName']}'),
+                                  Text('Quantity: ${order['quantity']}'),
+                                ],
+                              ),
                             ),
-                            SizedBox(height: 8),
-                            Text('Name: ${order['itemName']}'),
-                            Text('Quantity: ${order['quantity']}'),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Handle "Ready" button press
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text('Ready'),
+                            ),
                           ],
-                        ),
-                        const SizedBox(
-                          width: 150,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Handle "Ready" button press
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text('Ready'),
-                        ),
-                      ]),
+                        )
+
                     ),
                   ),
                 ),

@@ -7,64 +7,65 @@ class HomeAdmin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 60.0),
-                  const Padding(
-                    padding:  EdgeInsets.only(left: 20.0, top: 20),
-                    child: Text(
-                      "Navrachana Canteen",
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Text(
+                          "Navrachana Canteen",
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Image.asset(
+                          "images/nuvLogo.png",
+                          height: 60,
+                          width: 40,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 50.0),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0, top: 10),
-                    child: Image.asset(
-                      "images/nuvLogo.png",
-                      height: 60,
-                      width: 40,
-                      fit: BoxFit.cover,
-                    ),
+                  const SizedBox(height: 40.0),
+                  buildMenuCard(
+                    image: "images/add_food.jpeg",
+                    title: "+ Add Food Items",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AddFood()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  buildMenuCard(
+                    image: "images/menu.jpg",
+                    title: "View Menu Card",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MenuViewPage()),
+                      );
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 90.0),
-              buildMenuCard(
-                image: "images/add_food.jpeg",
-                title: "+ Add Food Items",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AddFood()),
-                  );
-                },
-              ),
-              const SizedBox(height: 40.0),
-              buildMenuCard(
-                image: "images/menu.jpg",
-                title: "View Menu Card",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MenuViewPage()),
-                  );
-                },
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
