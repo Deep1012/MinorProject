@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:campuscrave/services/database.dart';
-import 'package:campuscrave/services/shared_pref.dart';
+import 'package:campuscrave/database/database.dart';
+import 'package:campuscrave/database/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'success.dart';
+import 'user_success.dart';
 import 'package:intl/intl.dart';
 
 final formatter = DateFormat.yMd();

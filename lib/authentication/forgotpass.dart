@@ -1,4 +1,4 @@
-import 'package:campuscrave/screens/signin_screen.dart';
+import 'package:campuscrave/authentication/signin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

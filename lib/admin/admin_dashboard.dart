@@ -1,6 +1,6 @@
 import 'package:campuscrave/admin/admin_addFood.dart';
 import 'package:campuscrave/admin/admin_completedOrders.dart';
-import 'package:campuscrave/services/database.dart';
+import 'package:campuscrave/database/database.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

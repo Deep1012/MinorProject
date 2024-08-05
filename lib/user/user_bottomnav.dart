@@ -1,6 +1,6 @@
-import 'package:campuscrave/pages/user_home.dart';
-import 'package:campuscrave/pages/user_cart.dart';
-import 'package:campuscrave/pages/profile.dart';
+import 'package:campuscrave/user/user_home.dart';
+import 'package:campuscrave/user/user_cart.dart';
+import 'package:campuscrave/user/user_profile.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 

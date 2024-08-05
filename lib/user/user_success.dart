@@ -1,4 +1,4 @@
-import 'package:campuscrave/pages/user_bottomnav.dart';
+import 'package:campuscrave/user/user_bottomnav.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

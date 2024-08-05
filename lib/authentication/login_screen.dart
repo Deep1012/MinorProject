@@ -1,10 +1,10 @@
-import 'package:campuscrave/pages/user_bottomnav.dart';
-import 'package:campuscrave/screens/forgotpass.dart';
-import 'package:campuscrave/screens/signin_screen.dart';
+import 'package:campuscrave/user/user_bottomnav.dart';
+import 'package:campuscrave/authentication/forgotpass.dart';
+import 'package:campuscrave/authentication/signin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:campuscrave/services/shared_pref.dart';
+import 'package:campuscrave/database/shared_pref.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

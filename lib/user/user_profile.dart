@@ -1,7 +1,7 @@
-import 'package:campuscrave/pages/rateus.dart';
-import 'package:campuscrave/screens/login_screen.dart';
-import 'package:campuscrave/services/auth.dart';
-import 'package:campuscrave/services/shared_pref.dart';
+import 'package:campuscrave/user/rateus.dart';
+import 'package:campuscrave/authentication/login_screen.dart';
+import 'package:campuscrave/database/auth.dart';
+import 'package:campuscrave/database/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,7 +1,7 @@
 import "package:campuscrave/admin/admin_bottomnav.dart";
 import "package:campuscrave/admin/admin_login.dart";
 
-import "package:campuscrave/screens/login_screen.dart";
+import "package:campuscrave/authentication/login_screen.dart";
 import "package:flutter/material.dart";
 
 class WelcomeScreen extends StatelessWidget {

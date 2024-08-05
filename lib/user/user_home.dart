@@ -1,6 +1,6 @@
-import 'package:campuscrave/pages/user_foodDetail.dart';
-import 'package:campuscrave/services/database.dart';
-import 'package:campuscrave/services/shared_pref.dart';
+import 'package:campuscrave/user/user_foodDetail.dart';
+import 'package:campuscrave/database/database.dart';
+import 'package:campuscrave/database/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
