@@ -1,6 +1,8 @@
-import 'package:campuscrave/pages/bottomnav.dart';
-import 'package:campuscrave/screens/welcome.dart';
-import 'package:campuscrave/services/shared_pref.dart';
+
+import 'package:campuscrave/database/shared_pref.dart';
+import 'package:campuscrave/authentication/welcome.dart';
+import 'package:campuscrave/user/user_bottomnav.dart';
+
 import 'package:flutter/material.dart';
 
 class Splash extends StatefulWidget {

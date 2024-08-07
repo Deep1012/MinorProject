@@ -1,22 +1,13 @@
-<<<<<<< HEAD:lib/pages/bottomnav.dart
-
-import 'package:campuscrave/pages/home.dart';
-import 'package:campuscrave/pages/order.dart';
-import 'package:campuscrave/pages/profile.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/material.dart';
 
 
 
 
-=======
 import 'package:campuscrave/user/user_home.dart';
 import 'package:campuscrave/user/user_cart.dart';
 import 'package:campuscrave/user/user_profile.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
->>>>>>> yaksh:lib/user/user_bottomnav.dart
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 
