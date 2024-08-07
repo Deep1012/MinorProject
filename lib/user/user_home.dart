@@ -174,13 +174,13 @@ class _HomeState extends State<Home> {
                             style: AppWidget.semiBoldTextFieldStyle(),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 15),
                           Text(
                             ds["Detail"],
                             style: AppWidget.LightTextFieldStyle(),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 5),
                           Text(
                             "\₹${ds["Price"]}",
                             style: AppWidget.semiBoldTextFieldStyle(),
