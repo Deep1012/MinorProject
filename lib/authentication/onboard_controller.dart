@@ -1,6 +1,6 @@
 
 import 'package:campuscrave/admin/admin_bottomnav.dart';
-import 'package:campuscrave/screens/welcome.dart';
+import 'package:campuscrave/authentication/welcome.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +35,7 @@ class OnBoardingController extends GetxController {
 
       storage.write('IsFirstTime', false);
 
-      Get.offAll(const WelcomeScreen());
+      Get.offAll(() => const WelcomeScreen());
     } else {
       int page = currentPageIndex.value + 1;
       pageController.jumpToPage(page);
@@ -44,7 +44,7 @@ class OnBoardingController extends GetxController {
   void skipPage(){
     //currentPageIndex.value=2;
     //pageController.jumpToPage(2);
-    Get.to(WelcomeScreen());
+    Get.to(() => WelcomeScreen());
 
   }
 }

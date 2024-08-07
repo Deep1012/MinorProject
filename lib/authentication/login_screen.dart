@@ -1,32 +1,29 @@
+import 'package:campuscrave/user/user_bottomnav.dart';
+import 'package:campuscrave/authentication/forgotpass.dart';
+import 'package:campuscrave/authentication/signin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:campuscrave/pages/bottomnav.dart';
-import 'package:campuscrave/screens/login_screen.dart';
-import 'package:campuscrave/services/database.dart';
-import 'package:campuscrave/services/shared_pref.dart';
-import 'package:random_string/random_string.dart';
+import 'package:campuscrave/database/shared_pref.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   String email = "";
   String password = "";
-  String name = "";
-
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  TextEditingController userEmailController = TextEditingController();
+  TextEditingController userPasswordController = TextEditingController();
 
   bool _passwordVisible = false;
 
@@ -40,19 +37,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       await _googleSignIn.signOut(); // Sign out of current Google session
 
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
 
-        final UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
+        final UserCredential userCredential = await _auth.signInWithCredential(credential);
         final User? user = userCredential.user;
 
         if (user != null) {
@@ -63,10 +57,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           );
 
-          // Save user information to shared preferences
-          await SharedPreferenceHelper().saveUserName(user.displayName ?? '');
-          await SharedPreferenceHelper().saveUserEmail(user.email ?? '');
-          await SharedPreferenceHelper().saveUserId(user.uid);
+          // Fetch user profile and other data after successful login
+          await getthesharedpref();
+
+          // Save user profile data to shared preferences
+          await SharedPreferenceHelper().saveUserProfile('Updated profile data');
 
           // Navigate to the home page after successful sign-in
           Navigator.pushReplacement(
@@ -92,104 +87,102 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  void _register() async {
-    // Perform registration logic
-    // Replace with your registration logic
+  userLogin() async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Registered Successfully",
-            style: TextStyle(fontSize: 20.0),
-          ),
-        ),
-      );
+      // Fetch user profile and other data after successful login
+      await getthesharedpref();
 
-      String Id = randomAlphaNumeric(10);
-      Map<String, dynamic> addUserInfo = {
-        "Name": nameController.text,
-        "Email": emailController.text,
-        "Id": Id,
-      };
-      await DatabaseMethods().addUserDetail(addUserInfo, Id);
-      await SharedPreferenceHelper().saveUserName(nameController.text);
-      await SharedPreferenceHelper().saveUserEmail(emailController.text);
-      await SharedPreferenceHelper().saveUserId(Id);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const BottomNav()),
-      );
+      // Save user profile data to shared preferences
+      await SharedPreferenceHelper().saveUserProfile('Updated profile data');
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNav()));
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              "Password Provided is too Weak",
-              style: TextStyle(fontSize: 18.0),
-            ),
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "No User Found for that Email",
+            style: TextStyle(fontSize: 18.0, color: Colors.black),
           ),
-        );
-      } else if (e.code == "email-already-in-use") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              "Account Already Exists",
-              style: TextStyle(fontSize: 18.0),
-            ),
+        ));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Wrong Password Provided by User",
+            style: TextStyle(fontSize: 18.0, color: Colors.black),
           ),
-        );
+        ));
       }
+    } finally {
+      // Call getthesharedpref() regardless of login success or failure
+      await getthesharedpref();
+
+      // Save user profile data to shared preferences
+      await SharedPreferenceHelper().saveUserProfile('Updated profile data');
+    }
+  }
+
+  // Method to fetch user profile and cart data
+  Future<void> getthesharedpref() async {
+    try {
+      // Fetch user profile data
+      String? userProfile = await SharedPreferenceHelper().getUserProfile();
+
+      // Fetch other user data like name and email
+      String? name = await SharedPreferenceHelper().getUserName();
+      String? email = await SharedPreferenceHelper().getUserEmail();
+
+      setState(() {
+        // Update user profile and other data in the UI
+        // For example:
+        // profile = userProfile;
+        // this.name = name;
+        // this.email = email;
+      });
     } catch (e) {
-      print(e.toString());
+      print('Error fetching user profile and cart data: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: 70),
           child: Container(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Image(
-                  image: AssetImage("images/SigninIMG.png"),
-                  width: 200,
-                  height: 240,
+                  image: AssetImage("images/LoginIMG.png"),
+                  width: 300,
+                  height: 270,
                 ),
+                SizedBox(height: 20,),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Get On Board!",
+                    "Hello User!",
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w800),
                   ),
                 ),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Create your account to start Ordering!",
+                    "Login to your Account!",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                signinForm(),
+                const SizedBox(height: 0),
+                loginForm(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text("OR"),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     SizedBox(
                       height: 50,
                       width: double.infinity,
@@ -206,18 +199,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20,),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
+                            builder: (context) => const SignUpScreen(),
                           ),
                         );
                       },
-                      
                       child: const Text(
-                        "Already have an account? Log In",
+                        "Don't have an account? Sign up",
                         style: TextStyle(fontSize: 15, color: Colors.blue),
                       ),
                     ),
@@ -231,52 +224,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Form signinForm() {
+  Form loginForm() {
     return Form(
       key: _formKey,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: .0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: nameController,
+              controller: userEmailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please Enter Name';
+                  return 'Please Enter Email';
                 }
                 return null;
               },
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_outlined),
-                labelText: "Full Name ",
-                hintText: "Eg. John Doe",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            TextFormField(
-              controller: emailController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please Enter E-mail';
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.email_outlined),
                 labelText: "Email",
                 hintText: "example@gmail.com",
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 25),
             TextFormField(
-              controller: passwordController,
+              controller: userPasswordController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please Enter Password';
@@ -290,36 +263,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: _togglePasswordVisibility,
-                  icon: Icon(_passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off),
+                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ForgotPassword(),
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: const TextButton(
+                  onPressed: null,
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async {
+                onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() {
-                      email = emailController.text;
-                      name = nameController.text;
-                      password = passwordController.text;
+                      email = userEmailController.text;
+                      password = userPasswordController.text;
                     });
+                    userLogin();
                   }
-                  _register();
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                   backgroundColor: const Color.fromARGB(226, 0, 0, 0),
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                 ),
-                child: const Text("SIGN UP"),
+                child: const Text("LOGIN"),
               ),
             ),
           ],

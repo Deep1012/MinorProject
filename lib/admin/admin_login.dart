@@ -1,5 +1,5 @@
 import 'package:campuscrave/admin/admin_bottomnav.dart';
-import 'package:campuscrave/admin/home_admin.dart';
+import 'package:campuscrave/admin/admin_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

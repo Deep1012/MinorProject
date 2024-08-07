@@ -1,3 +1,4 @@
+<<<<<<< HEAD:lib/pages/bottomnav.dart
 
 import 'package:campuscrave/pages/home.dart';
 import 'package:campuscrave/pages/order.dart';
@@ -8,6 +9,14 @@ import 'package:flutter/material.dart';
 
 
 
+=======
+import 'package:campuscrave/user/user_home.dart';
+import 'package:campuscrave/user/user_cart.dart';
+import 'package:campuscrave/user/user_profile.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/material.dart';
+
+>>>>>>> yaksh:lib/user/user_bottomnav.dart
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 
@@ -23,15 +32,13 @@ class _BottomNavState extends State<BottomNav> {
   late Home homepage;
   late Profile profile;
   late Order order;
-  //late AdminOrderPage order1;
 
   @override
   void initState() {
     homepage = Home();
     order = Order();
-   //order1 = AdminOrderPage();
     profile = Profile();
-   
+
     pages = [homepage, order, profile];
     super.initState();
   }
@@ -43,7 +50,7 @@ class _BottomNavState extends State<BottomNav> {
           height: 65,
           backgroundColor: Colors.white,
           color: Colors.black,
-          animationDuration: Duration(milliseconds: 500),
+          animationDuration: const Duration(milliseconds: 500),
           onTap: (int index) {
             setState(() {
               currentTabIndex = index;
@@ -54,10 +61,6 @@ class _BottomNavState extends State<BottomNav> {
               Icons.home_outlined,
               color: Colors.white,
             ),
-            // Icon(
-            //   Icons.shopping_bag_outlined,
-            //   color: Colors.white,
-            // ),
             Icon(
               Icons.shopping_cart,
               color: Colors.white,
@@ -67,7 +70,11 @@ class _BottomNavState extends State<BottomNav> {
               color: Colors.white,
             )
           ]),
-      body: pages[currentTabIndex],
+      body: SafeArea(
+        top: false,
+        bottom: true,
+        child: pages[currentTabIndex],
+      ),
     );
   }
 }

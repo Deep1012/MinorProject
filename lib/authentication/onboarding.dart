@@ -1,29 +1,27 @@
 import 'package:campuscrave/constants/other.dart';
-import 'package:campuscrave/controllers/onboard_controller.dart';
+import 'package:campuscrave/authentication/onboard_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class NewOnboard extends StatelessWidget {
-  const NewOnboard({super.key});
+class OnboardScreen extends StatelessWidget {
+  const OnboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(OnBoardingController());
 
-
     return Scaffold(
+      backgroundColor: Color(0xffffffff),
       body: Stack(
         children: [
           /// Horizontal Scrollable Pages
           PageView(
-            controller : controller.pageController,
+            controller: controller.pageController,
             onPageChanged: controller.updatePageIndicator,
-
             children: const [
-              
               new_onboardingPage(
                 image: CCimage.onBoardingimage1,
                 title: CCtext.onBoardingtext1,
@@ -61,14 +59,12 @@ class onboardNext extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom : 35,
-      right : 30,
+      bottom: 35,
+      right: 30,
       child: ElevatedButton(
           onPressed: () => OnBoardingController.instance.nextPage(),
-          style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              backgroundColor: Colors.blueAccent,
-              foregroundColor: Colors.white),
+          style:
+              ElevatedButton.styleFrom(shape: CircleBorder(), backgroundColor: Colors.blueAccent, foregroundColor: Colors.white),
           child: const Icon(Iconsax.arrow_right_3)),
     );
   }
@@ -89,8 +85,7 @@ class onboardNavi extends StatelessWidget {
         controller: controller.pageController,
         onDotClicked: controller.dotNavigationClick,
         count: 3,
-        effect: ExpandingDotsEffect(
-            activeDotColor: Colors.blueAccent, dotHeight: 5),
+        effect: ExpandingDotsEffect(activeDotColor: Colors.blueAccent, dotHeight: 5),
       ),
     );
   }
@@ -109,9 +104,7 @@ class onboardSkip extends StatelessWidget {
       child: TextButton(
         onPressed: () => OnBoardingController.instance.skipPage(),
         child: const Text('Skip'),
-        style: TextButton.styleFrom(
-            foregroundColor: Colors.black,
-            textStyle: const TextStyle(fontSize: 18)),
+        style: TextButton.styleFrom(foregroundColor: Colors.black, textStyle: const TextStyle(fontSize: 18)),
       ),
     );
   }

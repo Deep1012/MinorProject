@@ -10,7 +10,7 @@ class MenuViewPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Menu'),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,10 +46,10 @@ class CategorySection extends StatelessWidget {
           ),
         ),
         StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection(category).snapshots(),
+          stream: FirebaseFirestore.instance.collection("Food").doc("Category").collection(category).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -60,17 +60,17 @@ class CategorySection extends StatelessWidget {
               children: [
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: totalFoodItems,
                   itemBuilder: (context, index) {
                     final foodItem = foodItems[index];
                     return FoodItemTile(foodItem: foodItem);
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'Total Products: $totalFoodItems',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -117,7 +117,7 @@ class _FoodItemTileState extends State<FoodItemTile> {
           style: TextStyle(fontSize: 18),
         ),
         subtitle: Text(
-          'Price: \$${widget.foodItem['Price']}',
+          'Price: \₹${widget.foodItem['Price']}',
           style: TextStyle(fontSize: 16),
         ),
         trailing: Switch(
@@ -133,12 +133,20 @@ class _FoodItemTileState extends State<FoodItemTile> {
     );
   }
 
+  // void _updateDisplayStatus(bool newValue) {
+  //   FirebaseFirestore.instance
+  //       .collection(widget.foodItem.reference.parent!.id)
+  //       .doc(widget.foodItem.id)
+  //       .update({
+  //     'isDisplayed': newValue,
+  //   });
+  // }
   void _updateDisplayStatus(bool newValue) {
     FirebaseFirestore.instance
-        .collection(widget.foodItem.reference.parent!.id)
-        .doc(widget.foodItem.id)
-        .update({
-      'isDisplayed': newValue,
-    });
+    .collection("Food") 
+        .doc("Category") 
+        .collection(widget.foodItem.reference.parent.id)  
+        .doc(widget.foodItem.id) 
+        .update({'isDisplayed': newValue});
   }
 }
