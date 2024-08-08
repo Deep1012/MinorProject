@@ -200,10 +200,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          height: screenHeight,
+          width: screenWidth,
           margin: const EdgeInsets.only(top: 50.0, left: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,43 +1,73 @@
-import 'package:campuscrave/constants/colors.dart';
-import 'package:campuscrave/database/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:campuscrave/constants/colors.dart';
+import 'package:campuscrave/database/firebase_options.dart';
 import 'package:campuscrave/authentication/authentication_repository.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:campuscrave/authentication/splash_screen.dart'; // Import your splash screen
+import 'package:campuscrave/authentication/onboarding.dart';
+import 'package:campuscrave/user/user_bottomnav.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-
-Future<void> main() async {
-  final WidgetsBinding widgetsBinding =
-      WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
-      .then(
-    (FirebaseApp value) => Get.put(AuthenticationRepository()),
-  );
-
-  // initializing local storage
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
 
-  // native Splash screen
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  Get.put(AuthenticationRepository());
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  Scaffold(
-          backgroundColor: CCcolors.primary,
-          body: Center(child: CircularProgressIndicator(color: Colors.white))),
+      home: SplashScreenWrapper(),
     );
   }
 }
 
+class SplashScreenWrapper extends StatefulWidget {
+  @override
+  _SplashScreenWrapperState createState() => _SplashScreenWrapperState();
+}
 
+class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    _startSplashScreen();
+  }
+
+  Future<void> _startSplashScreen() async {
+    // Wait for 5 seconds before navigating
+    await Future.delayed(Duration(seconds: 3));
+
+    // Navigate to the authentication wrapper after the delay
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => AuthenticationWrapper()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SplashScreen(); // Display the splash screen
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final deviceStorage = GetStorage();
+    bool isFirstTime = deviceStorage.read('isFirstTime') ?? true;
+
+    if (isFirstTime) {
+      return OnboardScreen();
+    } else {
+      return BottomNav();
+    }
+  }
+}

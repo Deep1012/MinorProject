@@ -309,22 +309,19 @@ class _OrderState extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
+      appBar: AppBar(
+        title: Text("Food Cart"),
+      ),
       body: isLoading // Use isLoading to determine what to show
           ? Center(child: CircularProgressIndicator())
           : Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.only(top: 60.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Material(
-                      elevation: 2.0,
-                      child: Container(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Center(
-                              child: Text(
-                            "Food Cart",
-                            style: AppWidget.HeadTextFieldStyle(),
-                          )))),
                   const SizedBox(
                     height: 20.0,
                   ),
