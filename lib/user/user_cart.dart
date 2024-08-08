@@ -26,7 +26,7 @@ class GenerateCode {
 
   GenerateCode() {
     var random = Random();
-    code = '${random.nextInt(9999)}';
+    code = '${random.nextInt(9000)}';
   }
 }
 
@@ -175,7 +175,6 @@ class _OrderState extends State<Order> {
 
   Widget foodCart() {
     return StreamBuilder(
-      
       stream: foodStream,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
@@ -310,10 +309,6 @@ class _OrderState extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading : false,
-        title: Text('Food Cart'),
-      ),
       body: isLoading // Use isLoading to determine what to show
           ? Center(child: CircularProgressIndicator())
           : Container(
@@ -321,7 +316,18 @@ class _OrderState extends State<Order> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
+                  Material(
+                      elevation: 2.0,
+                      child: Container(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Center(
+                              child: Text(
+                            "Food Cart",
+                            style: AppWidget.HeadTextFieldStyle(),
+                          )))),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
                   Container(height: MediaQuery.of(context).size.height / 2, child: foodCart()),
                   const Spacer(),
                   const Divider(),
@@ -332,7 +338,7 @@ class _OrderState extends State<Order> {
                       children: [
                         Text(
                           "Total Price",
-                          style: AppWidget.semiBoldTextFieldStyle(),
+                          style: AppWidget.boldTextFieldStyle(),
                         ),
                         Text(
                           "\₹" + total.toString(),
@@ -361,7 +367,7 @@ class _OrderState extends State<Order> {
                           "status": "created",
                           "attempts": 0,
                           "notes": [],
-                          "created_at":now,
+                          "created_at": 1566986570
                         },
                         'description': 'Quick Food',
                       };
