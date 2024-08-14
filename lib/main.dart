@@ -62,7 +62,7 @@ class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceStorage = GetStorage();
-    bool isFirstTime = deviceStorage.read('isFirstTime') ?? true;
+    bool isFirstTime = deviceStorage.read('helo') ?? true;
 
     if (isFirstTime) {
       return OnboardScreen();
