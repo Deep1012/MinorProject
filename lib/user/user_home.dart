@@ -1,6 +1,7 @@
 import 'package:campuscrave/user/user_foodDetail.dart';
 import 'package:campuscrave/database/database.dart';
 import 'package:campuscrave/database/shared_pref.dart';
+import 'package:campuscrave/widgets/userhome_vertical.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,166 +44,6 @@ class _HomeState extends State<Home> {
     fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Pizza");
     getthesharedpref();
     setState(() {});
-  }
-
-  Widget allItemsVertically() {
-    return StreamBuilder(
-        stream: fooditemStream,
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: snapshot.data.docs.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              DocumentSnapshot ds = snapshot.data.docs[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Details(
-                        detail: ds["Detail"],
-                        image: ds["Image"],
-                        name: ds["Name"],
-                        price: ds["Price"],
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(right: 20.0, bottom: 20),
-                  child: Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              ds["Image"],
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  ds["Name"],
-                                  style: AppWidget.semiBoldTextFieldStyle(),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  ds["Detail"],
-                                  style: AppWidget.LightTextFieldStyle(),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "\₹${ds["Price"]}",
-                                  style: AppWidget.semiBoldTextFieldStyle(),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        });
-  }
-
-  Widget allItems() {
-    return StreamBuilder(
-        stream: fooditemStream,
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: snapshot.data.docs.length,
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              DocumentSnapshot ds = snapshot.data.docs[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Details(
-                        detail: ds["Detail"],
-                        image: ds["Image"],
-                        name: ds["Name"],
-                        price: ds["Price"],
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  margin: const EdgeInsets.all(4),
-                  child: Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              ds["Image"],
-                              height: 120,
-                              width: 120,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            ds["Name"],
-                            style: AppWidget.semiBoldTextFieldStyle(),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            ds["Detail"],
-                            style: AppWidget.LightTextFieldStyle(),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "\₹${ds["Price"]}",
-                            style: AppWidget.semiBoldTextFieldStyle(),
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        });
   }
 
   @override
@@ -275,7 +116,7 @@ class _HomeState extends State<Home> {
                         Expanded(
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            child: allItemsVertically(),
+                            child: userhome_vertical(fooditemStream: fooditemStream),
                           ),
                         ),
                         const SizedBox(height: 20.0),
@@ -338,3 +179,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+

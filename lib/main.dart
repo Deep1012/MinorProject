@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:campuscrave/database/firebase_options.dart';
 import 'package:campuscrave/authentication/splash_screen.dart'; // Import your splash screen
 import 'package:campuscrave/authentication/onboarding.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

@@ -25,8 +25,8 @@ class GenerateCode {
   late String code;
 
   GenerateCode() {
-    var random = Random();
-    code = '${random.nextInt(9000)}';
+    
+    code = '${Random().nextInt(9999)}';
   }
 }
 
@@ -82,20 +82,7 @@ class _OrderState extends State<Order> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    placeOrder(orderCode);
-    StoreOrder(orderCode);
-    GenerateCode();
-    Get.to(() => Success(userId: id!, orderCode: orderCode));
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    // Handle payment error
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Handle external wallet
-  }
+ 
 
   @override
   void dispose() {
@@ -389,6 +376,29 @@ class _OrderState extends State<Order> {
               ),
             ),
     );
+  }
+
+   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    placeOrder(orderCode);
+    StoreOrder(orderCode);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Success(
+          userId: id!, // Pass the user ID
+          orderCode: orderCode, // Pass the generated order code
+        ),
+      ),
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Handle payment error
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Handle external wallet
   }
 
   var code1 = GenerateCode();

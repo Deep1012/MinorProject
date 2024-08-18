@@ -14,12 +14,14 @@ class Success extends StatefulWidget {
 
 class _SuccessState extends State<Success> {
   late Stream<QuerySnapshot> ordersStream;
+  late String orderCode;
 
   @override
   void initState() {
     super.initState();
     // Query the FinalOrders collection based on the user's ID
     ordersStream = FirebaseFirestore.instance.collection("FinalOrders").where('userId', isEqualTo: widget.userId).snapshots();
+    orderCode = widget.orderCode;
   }
 
   @override
@@ -27,6 +29,8 @@ class _SuccessState extends State<Success> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Success'),
+        automaticallyImplyLeading: false,
+      
       ),
       body: StreamBuilder(
         stream: ordersStream,
@@ -52,7 +56,7 @@ class _SuccessState extends State<Success> {
           // Only one order is expected, so no need for ListView.builder
           DocumentSnapshot order = snapshot.data!.docs[0];
 
-          String orderCode = order['OrderID'];
+          //String orderCode = order['OrderID'];
 
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             //Section 1
@@ -71,7 +75,7 @@ class _SuccessState extends State<Success> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                'Order ID: ${order['OrderID']}',
+                'Order ID: $orderCode',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
             ),
