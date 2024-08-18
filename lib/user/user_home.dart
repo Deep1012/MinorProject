@@ -120,15 +120,28 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        
                       ],
                     ),
                   ),
                 )
               : Center(
-                  child: Text(
-                    "Canteen is closed",
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      
+                      Image.asset(
+                        "images/sorry.gif",
+                        height: 300,
+                        width: 300,
+                        alignment: Alignment.center,
+                      ),
+                      const SizedBox(height: 20.0), // Add spacing between the image and the text
+                      const Text(
+                        "Sorry, Canteen is closed.",
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center, // Center the text within its own box
+                      ),
+                    ],
                   ),
                 ),
     );
@@ -179,5 +192,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-

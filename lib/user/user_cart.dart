@@ -25,7 +25,6 @@ class GenerateCode {
   late String code;
 
   GenerateCode() {
-    
     code = '${Random().nextInt(9999)}';
   }
 }
@@ -39,6 +38,7 @@ class _OrderState extends State<Order> {
   var _razorpay = Razorpay();
   late String orderCode;
   bool isLoading = true; // Add a loading state
+  bool? isOpen;
 
   // List to keep track of dismissed items
   final List<DocumentSnapshot> _dismissedItems = [];
@@ -74,20 +74,26 @@ class _OrderState extends State<Order> {
 
   @override
   void initState() {
+    super.initState();
     ontheload();
     startTimer();
-    super.initState();
+    checkCanteenStatus();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
- 
-
   @override
   void dispose() {
     super.dispose();
     _razorpay.clear();
+  }
+
+  Future<void> checkCanteenStatus() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('canteen').doc('status').get();
+    setState(() {
+      isOpen = snapshot['isOpen'];
+    });
   }
 
   Future<void> _deleteItemFromCart(DocumentSnapshot item) async {
@@ -222,17 +228,6 @@ class _OrderState extends State<Order> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  // Uncomment and use this if you want the image
-                                  // ClipRRect(
-                                  //   borderRadius: BorderRadius.circular(60),
-                                  //   child: Image.network(
-                                  //     ds["Image"],
-                                  //     height: 90,
-                                  //     width: 90,
-                                  //     fit: BoxFit.cover,
-                                  //   ),
-                                  // ),
-
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -296,82 +291,114 @@ class _OrderState extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Food Cart"),
-        automaticallyImplyLeading: false,
-      ),
-      body: isLoading // Use isLoading to determine what to show
+      body: isLoading || isOpen == null
           ? Center(child: CircularProgressIndicator())
-          : Container(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  
-                  Container(height: MediaQuery.of(context).size.height / 2, child: foodCart()),
-                  const Spacer(),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Total Price",
-                          style: AppWidget.semiBoldTextFieldStyle(),
+          : isOpen == true // Check if the canteen is open
+              ? Container(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 70,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                        child: Text(
+                          "Food Cart",
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        Text(
-                          "\₹" + total.toString(),
-                          style: AppWidget.semiBoldTextFieldStyle(),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      orderCode = '${Random().nextInt(9999)}';
-                      var options = {
-                        'key': 'rzp_test_YX11pZyfLyoM43',
-                        'amount': (total) * 100,
-                        'name': 'Canteen',
-                        'order': {
-                          "id": orderCode,
-                          "entity": "order",
-                          "amount_paid": 0,
-                          "amount_due": 0,
-                          "currency": "INR",
-                          "receipt": "Receipt ${Random().nextInt(10)}",
-                          "status": "created",
-                          "attempts": 0,
-                          "notes": [],
-                          "created_at": 1566986570
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: foodCart(),
+                      ),
+                      const Spacer(),
+                      const Divider(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total Price",
+                              style: AppWidget.semiBoldTextFieldStyle(),
+                            ),
+                            Text(
+                              "\₹" + total.toString(),
+                              style: AppWidget.semiBoldTextFieldStyle(),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          orderCode = '${Random().nextInt(9999)}';
+                          var options = {
+                            'key': 'rzp_test_YX11pZyfLyoM43',
+                            'amount': (total) * 100,
+                            'name': 'Canteen',
+                            'order': {
+                              "id": orderCode,
+                              "entity": "order",
+                              "amount_paid": 0,
+                              "amount_due": 0,
+                              "currency": "INR",
+                              "receipt": "Receipt ${Random().nextInt(10)}",
+                              "status": "created",
+                              "attempts": 0,
+                              "notes": [],
+                              "created_at": 1566986570
+                            },
+                            'description': 'Quick Food',
+                          };
+                          _razorpay.open(options);
                         },
-                        'description': 'Quick Food',
-                      };
-                      _razorpay.open(options);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-                      margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                      child: const Center(
-                          child: Text(
-                        "CheckOut",
-                        style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                          child: const Center(
+                            child: Text(
+                              "CheckOut",
+                              style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "images/sorry.gif",
+                        height: 300,
+                        width: 300,
+                        alignment: Alignment.center,
+                      ),
+                      const SizedBox(height: 20.0), // Add spacing between the image and the text
+                      const Text(
+                        "Sorry, Canteen is closed.",
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
     );
   }
 
-   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
     placeOrder(orderCode);
     StoreOrder(orderCode);
 
