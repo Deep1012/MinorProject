@@ -296,25 +296,18 @@ class _OrderState extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Food Cart"),
+        automaticallyImplyLeading: false,
+      ),
       body: isLoading // Use isLoading to determine what to show
           ? Center(child: CircularProgressIndicator())
           : Container(
-              padding: const EdgeInsets.only(top: 60.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Material(
-                      elevation: 2.0,
-                      child: Container(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Center(
-                              child: Text(
-                            "Food Cart",
-                            style: AppWidget.HeadTextFieldStyle(),
-                          )))),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
+                  
                   Container(height: MediaQuery.of(context).size.height / 2, child: foodCart()),
                   const Spacer(),
                   const Divider(),
@@ -325,7 +318,7 @@ class _OrderState extends State<Order> {
                       children: [
                         Text(
                           "Total Price",
-                          style: AppWidget.boldTextFieldStyle(),
+                          style: AppWidget.semiBoldTextFieldStyle(),
                         ),
                         Text(
                           "\₹" + total.toString(),

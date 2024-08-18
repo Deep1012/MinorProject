@@ -78,6 +78,7 @@ class _AdminOrdersState extends State<AdminOrders> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Orders'),
+        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: ordersStream,
