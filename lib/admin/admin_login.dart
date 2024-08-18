@@ -49,7 +49,7 @@ class _AdminLoginState extends State<AdminLogin> {
                 child: Column(
                   children: [
                     const Text(
-                      "Let's start with\nAdmin!",
+                      "Admin Console",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 25.0,
@@ -63,7 +63,7 @@ class _AdminLoginState extends State<AdminLogin> {
                       elevation: 8.0,
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 2.2,
+                        height: MediaQuery.of(context).size.height / 2.5,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -71,7 +71,7 @@ class _AdminLoginState extends State<AdminLogin> {
                         child: Column(
                           children: [
                             const SizedBox(
-                              height: 50.0,
+                              height: 30.0,
                             ),
                             Container(
                               padding: const EdgeInsets.only(
@@ -94,7 +94,7 @@ class _AdminLoginState extends State<AdminLogin> {
                               ),
                             ),
                             const SizedBox(
-                              height: 40.0,
+                              height: 20.0,
                             ),
                             Container(
                               padding: const EdgeInsets.only(

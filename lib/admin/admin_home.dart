@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:campuscrave/admin/admin_addFood.dart';
 import 'package:campuscrave/admin/admin_menu.dart';
 
-class HomeAdmin extends StatelessWidget {
+class HomeAdmin extends StatefulWidget {
   const HomeAdmin({Key? key}) : super(key: key);
+
+  @override
+  _HomeAdminState createState() => _HomeAdminState();
+}
+
+class _HomeAdminState extends State<HomeAdmin> {
+  bool isOpen = false; // Default value, should be fetched from Firestore
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchStatus();
+  }
+
+  // Fetch the current status from Firestore
+  void _fetchStatus() async {
+    DocumentSnapshot statusDoc = await FirebaseFirestore.instance.collection('canteen').doc('status').get();
+
+    if (statusDoc.exists) {
+      setState(() {
+        isOpen = statusDoc['isOpen'] ?? false;
+      });
+    }
+  }
+
+  // Update the status in Firestore
+  void _updateStatus(bool value) async {
+    await FirebaseFirestore.instance.collection('canteen').doc('status').update({'isOpen': value});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +70,31 @@ class HomeAdmin extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Canteen Status",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Switch(
+                        activeColor: Colors.green,
+                        inactiveTrackColor: Colors.black,
+                        value: isOpen,
+                        onChanged: (value) {
+                          setState(() {
+                            isOpen = value;
+                            _updateStatus(value);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
                   buildMenuCard(
                     image: "images/add_food.jpeg",
                     title: "+ Add Food Items",
