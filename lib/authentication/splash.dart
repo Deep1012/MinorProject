@@ -1,6 +1,7 @@
 import 'package:campuscrave/database/shared_pref.dart';
 import 'package:campuscrave/authentication/welcome.dart';
 import 'package:campuscrave/user/user_bottomnav.dart';
+
 import 'package:flutter/material.dart';
 
 class Splash extends StatefulWidget {
@@ -13,6 +14,7 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 3), () async {
       bool loggedIn = await SharedPreferenceHelper.isLoggedIn();
@@ -27,11 +29,6 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return Scaffold();
   }
 }

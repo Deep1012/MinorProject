@@ -52,68 +52,60 @@ class _SuccessState extends State<Success> {
           // Only one order is expected, so no need for ListView.builder
           DocumentSnapshot order = snapshot.data!.docs[0];
 
-          // Use the orderCode passed to the widget
-          String orderCode = widget.orderCode;
+          String orderCode = order['OrderID'];
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // Section 1
-              const Image(
-                image: AssetImage("images/success.gif"),
-                width: 300,
-                height: 350,
-              ),
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            //Section 1
 
-              // Section 2
-              const Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Payment Successful!",
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.w800),
-                ),
+            const Image(image: AssetImage("images/success.gif"), width: 300, height: 350),
+
+            //sectiion 2
+            const Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Payment Successful!",
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w800),
               ),
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Order ID: ${order["OrderID"]}', // Use the passed orderCode
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                ),
+            ),
+            SizedBox(height: 20),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                'Order ID: ${order['OrderID']}',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
-              const SizedBox(
-                height: 20,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Align(
+              alignment: Alignment.center,
+              child: Text(
+                "\t\t\t\tYour order is being prepared!!! \n\t\t\t\tShow your OrderID at counter",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
-              const Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "\t\t\t\tYour order is being prepared!!! \n\t\t\t\tShow your OrderID at counter",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              SizedBox(
-                height: 50,
-                width: 300,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              height: 50,
+              width: 300,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 203, 67, 25),
                     foregroundColor: Color.fromARGB(255, 255, 255, 255),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                  ),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNav()));
-                  },
-                  child: const Text(
-                    "Return to Home Page",
-                    style: TextStyle(fontSize: 20),
-                  ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNav()));
+                },
+                child: const Text(
+                  "Return to Home Page",
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
-            ],
-          );
+            ),
+          ]);
         },
       ),
     );

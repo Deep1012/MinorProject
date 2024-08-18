@@ -309,80 +309,84 @@ class _OrderState extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Food Cart"),
-        automaticallyImplyLeading: false, // Remove back button
-      ),
       body: isLoading // Use isLoading to determine what to show
           ? Center(child: CircularProgressIndicator())
           : Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.only(top: 60.0),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Expanded(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height / 2,
-                    child: foodCart(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Material(
+                      elevation: 2.0,
+                      child: Container(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Center(
+                              child: Text(
+                            "Food Cart",
+                            style: AppWidget.HeadTextFieldStyle(),
+                          )))),
+                  const SizedBox(
+                    height: 20.0,
                   ),
-                ),
-                const Spacer(),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Total Price",
-                        style: AppWidget.boldTextFieldStyle(),
-                      ),
-                      Text(
-                        "\₹" + total.toString(),
-                        style: AppWidget.semiBoldTextFieldStyle(),
-                      )
-                    ],
+                  Container(height: MediaQuery.of(context).size.height / 2, child: foodCart()),
+                  const Spacer(),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Total Price",
+                          style: AppWidget.boldTextFieldStyle(),
+                        ),
+                        Text(
+                          "\₹" + total.toString(),
+                          style: AppWidget.semiBoldTextFieldStyle(),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    orderCode = '${Random().nextInt(9999)}';
-                    var options = {
-                      'key': 'rzp_test_YX11pZyfLyoM43',
-                      'amount': (total) * 100,
-                      'name': 'Canteen',
-                      'order': {
-                        "id": orderCode,
-                        "entity": "order",
-                        "amount_paid": 0,
-                        "amount_due": 0,
-                        "currency": "INR",
-                        "receipt": "Receipt ${Random().nextInt(10)}",
-                        "status": "created",
-                        "attempts": 0,
-                        "notes": [],
-                        "created_at": 1566986570
-                      },
-                      'description': 'Quick Food',
-                    };
-                    _razorpay.open(options);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-                    margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                    child: const Center(
-                        child: Text(
-                      "CheckOut",
-                      style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
-                    )),
+                  const SizedBox(
+                    height: 20.0,
                   ),
-                )
-              ]),
+                  GestureDetector(
+                    onTap: () {
+                      orderCode = '${Random().nextInt(9999)}';
+                      var options = {
+                        'key': 'rzp_test_YX11pZyfLyoM43',
+                        'amount': (total) * 100,
+                        'name': 'Canteen',
+                        'order': {
+                          "id": orderCode,
+                          "entity": "order",
+                          "amount_paid": 0,
+                          "amount_due": 0,
+                          "currency": "INR",
+                          "receipt": "Receipt ${Random().nextInt(10)}",
+                          "status": "created",
+                          "attempts": 0,
+                          "notes": [],
+                          "created_at": 1566986570
+                        },
+                        'description': 'Quick Food',
+                      };
+                      _razorpay.open(options);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                      margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                      child: const Center(
+                          child: Text(
+                        "CheckOut",
+                        style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+                      )),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }

@@ -54,7 +54,7 @@ class _DetailsState extends State<Details> {
                 widget.image,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 2.5,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               ),
             ),
             const SizedBox(

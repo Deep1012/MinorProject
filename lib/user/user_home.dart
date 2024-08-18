@@ -14,23 +14,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool icecream = false, pizza = false, salad = false, burger = false;
-  bool? isOpen; // Changed to nullable to handle loading state
+
   Stream? fooditemStream;
   String? name;
-
-  @override
-  void initState() {
-    super.initState();
-    checkCanteenStatus();
-    ontheload();
-  }
-
-  Future<void> checkCanteenStatus() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('canteen').doc('status').get();
-    setState(() {
-      isOpen = snapshot['isOpen'];
-    });
-  }
 
   getthesharedpref() async {
     name = await SharedPreferenceHelper().getUserName();
@@ -41,6 +27,12 @@ class _HomeState extends State<Home> {
     fooditemStream = await DatabaseMethods().getDisplayedFoodItems("Pizza");
     getthesharedpref();
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    ontheload();
+    super.initState();
   }
 
   Widget allItemsVertically() {
@@ -55,6 +47,7 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.zero,
             itemCount: snapshot.data.docs.length,
             shrinkWrap: true,
+            scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data.docs[index];
               return GestureDetector(
@@ -206,80 +199,76 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: isOpen == null
-          ? const Center(child: CircularProgressIndicator()) // Show loading indicator while fetching `isOpen`
-          : isOpen!
-              ? SingleChildScrollView(
-                  child: Container(
-                    height: screenHeight,
-                    width: screenWidth,
-                    margin: const EdgeInsets.only(top: 50.0, left: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            name == null
-                                ? const Center(child: CircularProgressIndicator())
-                                : Padding(
-                                    padding: const EdgeInsets.only(top: 30),
-                                    child: Text(
-                                      "Welcome $name!!",
-                                      style: AppWidget.boldTextFieldStyle(),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 30.0, top: 20),
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Image.asset(
-                                "images/nuvLogo.png",
-                                height: 60,
-                                width: 40,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          ],
+      
+      body: SingleChildScrollView(
+        child: Container(
+          width: screenWidth,
+          margin: const EdgeInsets.only(top: 50.0, left: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  name == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Text(
+                            "Welcome $name!!",
+                            style: AppWidget.boldTextFieldStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        const SizedBox(height: 20.0),
-                        Text(
-                          "NUV Canteen",
-                          style: AppWidget.HeadTextFieldStyle(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          "Order beforehand to skip the wait!!",
-                          style: AppWidget.LightTextFieldStyle(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 20.0),
-                        showItem(),
-                        const SizedBox(height: 30.0),
-                        SizedBox(
-                          height: 270,
-                          child: allItems(),
-                        ),
-                        const SizedBox(height: 20.0),
-                        Expanded(
-                          child: allItemsVertically(),
-                        ),
-                      ],
+                  Container(
+                    margin: const EdgeInsets.only(right: 30.0, top: 20),
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
-                )
-              : Center(
-                  child: Text(
-                    "Canteen is closed",
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
+                    child: Image.asset(
+                      "images/nuvLogo.png",
+                      height: 60,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              Text(
+                "NUV Canteen",
+                style: AppWidget.HeadTextFieldStyle(),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                "Order beforehand to skip the wait!!",
+                style: AppWidget.LightTextFieldStyle(),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 20.0),
+              Container(margin: const EdgeInsets.only(right: 20.0), child: showItem()),
+              const SizedBox(height: 20.0),
+              Container(
+                margin: const EdgeInsets.only(right: 20.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0), // Set the border radius here
+                  child: Image.asset("images/home_ordernow.png"),
                 ),
+              ),
+
+              const SizedBox(height: 30.0),
+              SizedBox(
+                height: 270,
+                child: allItemsVertically(),
+              ),
+              const SizedBox(height: 20.0),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

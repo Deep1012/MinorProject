@@ -6,19 +6,7 @@ import 'package:flutter/foundation.dart';
 class DatabaseMethods {
   get http => null; //can be used for user(not sure)
 
-  Future<Stream<QuerySnapshot>?> getDisplayedFoodItems(String name) async {
-    try {
-      return FirebaseFirestore.instance
-          .collection("Food")
-          .doc("Category")
-          .collection(name)
-          .where('isDisplayed', isEqualTo: true)
-          .snapshots();
-    } catch (e) {
-      print("Error fetching displayed food items: $e");
-      return null;
-    }
-  }
+  
 
   Future<List<DocumentSnapshot>> getAllUsers() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').get();
@@ -106,7 +94,19 @@ class DatabaseMethods {
     }
   }
 
-  
+  Future<Stream<QuerySnapshot>?> getDisplayedFoodItems(String name) async {
+    try {
+      return FirebaseFirestore.instance
+      .collection("Food")
+      .doc("Category")
+      .collection(name)
+      .where('isDisplayed', isEqualTo: true)
+      .snapshots();
+    } catch (e) {
+      print("Error fetching displayed food items: $e");
+      return null;
+    }
+  }
 
   // Function to move items from cart to FinalOrders collection
   Future<void> moveCartItemsToFinalOrders(String userId, String code) async {
