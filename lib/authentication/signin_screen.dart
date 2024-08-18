@@ -54,18 +54,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         if (user != null) {
           // Signed in
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Sign in with Google succeeded'),
-            ),
-          );
-
-          // Save user information to shared preferences
           await SharedPreferenceHelper().saveUserName(user.displayName ?? '');
           await SharedPreferenceHelper().saveUserEmail(user.email ?? '');
           await SharedPreferenceHelper().saveUserId(user.uid);
+          await SharedPreferenceHelper.setLoggedIn(true); // Set login state to true
 
-          // Navigate to the home page after successful sign-in
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const BottomNav()),
@@ -90,8 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _register() async {
-    // Perform registration logic
-    // Replace with your registration logic
+    if (!_formKey.currentState!.validate()) return; // Only proceed if form is valid
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -107,16 +99,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       );
 
-      String Id = randomAlphaNumeric(1000);
+      String userId = randomAlphaNumeric(1000);
       Map<String, dynamic> addUserInfo = {
         "Name": nameController.text,
         "Email": emailController.text,
-        "Id": Id,
+        "Id": userId,
       };
-      await DatabaseMethods().addUserDetail(addUserInfo, Id);
+      await DatabaseMethods().addUserDetail(addUserInfo, userId);
       await SharedPreferenceHelper().saveUserName(nameController.text);
       await SharedPreferenceHelper().saveUserEmail(emailController.text);
-      await SharedPreferenceHelper().saveUserId(Id);
+      await SharedPreferenceHelper().saveUserId(userId);
+      await SharedPreferenceHelper.setLoggedIn(true); // Set login state to true
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const BottomNav()),
@@ -180,7 +174,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 20,
                 ),
                 signinForm(),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -305,8 +301,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       name = nameController.text;
                       password = passwordController.text;
                     });
+                     _register(); // Wait for the registration to complete
                   }
-                  _register();
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),

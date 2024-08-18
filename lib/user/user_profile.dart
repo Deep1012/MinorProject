@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:campuscrave/authentication/login_screen.dart';
 import 'package:campuscrave/database/auth.dart';
 import 'package:campuscrave/database/shared_pref.dart';
 import 'package:campuscrave/user/user_feedback.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:flutter/cupertino.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -15,21 +15,23 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String? name, email;
+  String _userName = "";
 
   @override
   void initState() {
     super.initState();
-    onThisLoad();
+    _loadUserData();
   }
 
-  Future<void> onThisLoad() async {
-    await getSharedPref();
-    setState(() {});
-  }
-
-  Future<void> getSharedPref() async {
+  Future<void> _loadUserData() async {
     name = await SharedPreferenceHelper().getUserName();
     email = await SharedPreferenceHelper().getUserEmail();
+
+    String? userName = await SharedPreferenceHelper().getUserName();
+
+    setState(() {
+      _userName = userName ?? "Guest";
+    });
   }
 
   Future<void> _showConfirmationDialog(BuildContext context, String title, String content, VoidCallback onConfirm) {
@@ -81,14 +83,16 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void _deleteAccount() {
-    AuthMethods().deleteuser();
-    Get.offAll(() => const LoginScreen()); // Navigate to LoginScreen with proper initialization
+  void _deleteAccount() async {
+    await AuthMethods().deleteuser();
+    await SharedPreferenceHelper.setLoggedIn(false); // Set login state to false
+    Get.offAll(() => const LoginScreen()); // Navigate to LoginScreen
   }
 
-  void _logout() {
-    AuthMethods().SignOut();
-    Get.offAll(() => const LoginScreen()); // Navigate to LoginScreen with proper initialization
+  void _logout() async {
+    await AuthMethods().SignOut();
+    await SharedPreferenceHelper.setLoggedIn(false); // Set login state to false
+    Get.offAll(() => const LoginScreen()); // Navigate to LoginScreen
   }
 
   @override
@@ -111,10 +115,10 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 20.0),
-                    buildInfoCard(Icons.person, 'Name', name!),
+                    // const SizedBox(height: 20.0),
+                    // buildInfoCard(Icons.person, 'Name', name!),
                     const SizedBox(height: 10.0),
-                    buildInfoCard(Icons.email, 'Email', email!),
+                    buildInfoCard(Icons.email, 'Account', email!),
                     const SizedBox(height: 30.0),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -126,7 +130,7 @@ class _ProfileState extends State<Profile> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () {
-                        Get.to(() => FeedbackPage());
+                        Get.to(() => FeedbackPage()); // Navigate to FeedbackPage
                       },
                       child: Row(
                         children: [
@@ -196,11 +200,11 @@ class _ProfileState extends State<Profile> {
                           _logout,
                         );
                       },
-                      child: const  Row(
+                      child: Row(
                         children: [
                           Icon(Icons.logout, color: Colors.blue),
-                           SizedBox(width: 20.0),
-                           Text(
+                          const SizedBox(width: 20.0),
+                          const Text(
                             'Log Out',
                             style: TextStyle(
                               fontFamily: 'SF Pro Text',

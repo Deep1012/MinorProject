@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
                                 : Padding(
                                     padding: const EdgeInsets.only(top: 30),
                                     child: Text(
-                                      "Welcome $name!!",
+                                      "Welcome!!",
                                       style: AppWidget.boldTextFieldStyle(),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
                             )
                           ],
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 10.0),
                         Text(
                           "NUV Canteen",
                           style: AppWidget.HeadTextFieldStyle(),

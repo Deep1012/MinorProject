@@ -1,4 +1,8 @@
+import 'package:campuscrave/authentication/onboarding.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:campuscrave/authentication/login_screen.dart'; // Make sure to import your login screen
+import 'package:campuscrave/user/user_bottomnav.dart'; // Make sure to import your main screen or home screen
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -6,18 +10,51 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  double _opacity = 0.0;
+  AnimationController? _controller;
+  Animation<double>? _animation;
 
   @override
   void initState() {
     super.initState();
 
-    // Start the animation after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _opacity = 1.0;
+    // Initialize the AnimationController
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3), // Duration of the entire splash screen
+      vsync: this,
+    )..addListener(() {
+        setState(() {});
       });
+
+    // Define the animation
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _controller!,
+      curve: Curves.easeInOut,
+    ));
+
+    // Start the animation
+    _controller!.forward();
+
+    // Navigate to the next screen after the animation completes
+    Future.delayed(Duration(seconds: 3), () async {
+      final prefs = await SharedPreferences.getInstance();
+      final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+      if (isLoggedIn) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => BottomNav()), // Replace with your main screen
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => OnboardScreen()), // Replace with your login screen
+        );
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -25,9 +62,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: Colors.white, // Set your desired background color
       body: Center(
-        child: AnimatedOpacity(
-          opacity: _opacity,
-          duration: Duration(seconds: 2), // Duration of the fade-in effect
+        child: FadeTransition(
+          opacity: _animation!,
           child: Image.asset(
             'images/SplashLOGO.png', // Path to your image asset
             width: 250, // Set the width of the logo
