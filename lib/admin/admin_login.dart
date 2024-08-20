@@ -20,6 +20,9 @@ class _AdminLoginState extends State<AdminLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Admin Console"),
+      ),
       backgroundColor: const Color(0xFFededeb),
       body: Container(
         child: Stack(
@@ -48,17 +51,7 @@ class _AdminLoginState extends State<AdminLogin> {
                 key: _formkey,
                 child: Column(
                   children: [
-                    const Text(
-                      "Admin Console",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
+                    
                     Material(
                       elevation: 8.0,
                       borderRadius: BorderRadius.circular(20),

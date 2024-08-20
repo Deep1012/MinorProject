@@ -16,7 +16,7 @@ class _AdminOrdersState extends State<AdminOrders> {
   @override
   void initState() {
     super.initState();
-    ordersStream = FirebaseFirestore.instance.collection("FinalOrders").snapshots();
+    ordersStream = FirebaseFirestore.instance.collection("FinalOrders").orderBy('date', descending: true).snapshots();
   }
 
   Future<void> _saveOrder(DocumentSnapshot order) async {
@@ -165,9 +165,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                FirebaseFirestore.instance.collection('images').doc('currentImage').set({
-                                  'url': 'https://example.com/new_image.png', // Replace with the actual image URL
-                                });
+                                
                               },
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white,

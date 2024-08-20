@@ -1,3 +1,4 @@
+import 'package:campuscrave/user/user_pastO.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -120,6 +121,35 @@ class _ProfileState extends State<Profile> {
                     const SizedBox(height: 10.0),
                     buildInfoCard(Icons.email, 'Account', email!),
                     const SizedBox(height: 30.0),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        elevation: 2.0,
+                        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                        side: BorderSide(color: Colors.black, width: 2),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        Get.to(() => PastOrdersPage()); // Navigate to FeedbackPage
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.list, color: Colors.black),
+                          const SizedBox(width: 20.0),
+                          const Text(
+                            'Past Orders',
+                            style: TextStyle(
+                              fontFamily: 'SF Pro Text',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30,),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

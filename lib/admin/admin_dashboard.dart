@@ -29,7 +29,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     int count = 0;
     // Fetch food items from each category and sum up the counts
     for (String category in ['Pizza', 'Burger', 'Ice-cream', 'Salad']) {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(category).get();
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection("Food").doc("Category").collection(category).get();
       count += snapshot.size;
     }
     setState(() {
@@ -46,24 +46,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 50),
-        child: Scaffold(
+    return 
+         Scaffold(
+          appBar: AppBar(
+            title: Text("Dashboard"),
+            automaticallyImplyLeading: false,
+          ),
           body: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Dashboard",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 11, 11, 11),
-                    ),
-                  ),
-                  const SizedBox(height: 30.0),
+                  
                   GridView.builder(
                     shrinkWrap: true,
                     primary: false,
@@ -87,7 +82,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ),
           ),
-        ));
+        );
   }
 
   Widget _buildGridItem({required String title, required String subtitle, required IconData icon}) {
