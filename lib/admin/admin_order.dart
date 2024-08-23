@@ -16,7 +16,7 @@ class _AdminOrdersState extends State<AdminOrders> {
   @override
   void initState() {
     super.initState();
-    ordersStream = FirebaseFirestore.instance.collection("FinalOrders").snapshots();
+    ordersStream = FirebaseFirestore.instance.collection("FinalOrders").orderBy('date', descending: true).snapshots();
   }
 
   Future<void> _saveOrder(DocumentSnapshot order) async {
@@ -78,6 +78,7 @@ class _AdminOrdersState extends State<AdminOrders> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Orders'),
+        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: ordersStream,
@@ -144,8 +145,8 @@ class _AdminOrdersState extends State<AdminOrders> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Row(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute space between children
                           children: [
                             Expanded(
@@ -164,7 +165,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                // Handle "Ready" button press
+                                
                               },
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white,
@@ -176,9 +177,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                               child: Text('Ready'),
                             ),
                           ],
-                        )
-
-                    ),
+                        )),
                   ),
                 ),
               );

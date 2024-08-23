@@ -51,17 +51,7 @@ class DatabaseMethods {
     }
   }
 
-  Future<void> finalOrder(Map<String, dynamic> userInfoMap, String id) async {
-    try {
-      await FirebaseFirestore.instance
-      .collection('Users')
-      .doc(id)
-      .collection('FinalOrder')
-      .add(userInfoMap);
-    } catch (e) {
-      print("Error adding food to cart: $e");
-    }
-  }
+  
 
   Future<Stream<QuerySnapshot>?> getFoodCart(String id) async {
     try {
@@ -87,7 +77,7 @@ class DatabaseMethods {
       DateTime now,String userId, String orderNumber, int totalAmount, List<Map<String, dynamic>> items, String code) async {
     try {
       // Move items from cart to FinalOrders collection
-      await moveCartItemsToFinalOrders(userId, code);
+      await moveCartItemsToFinalOrders(userId, orderNumber);
     } catch (e) {
       print('Error placing order: $e');
       // Handle error accordingly
@@ -145,7 +135,7 @@ class DatabaseMethods {
       DateTime now,String userId, String orderNumber, int totalAmount, List<Map<String, dynamic>> Storeitems, String code) async {
     try {
       // Move items from cart to FinalOrders collection
-      await moveCartItemsToStoreOrders(userId, code);
+      await moveCartItemsToStoreOrders(userId, orderNumber);
     } catch (e) {
       print('Error placing order: $e');
       // Handle error accordingly

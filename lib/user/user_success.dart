@@ -14,19 +14,22 @@ class Success extends StatefulWidget {
 
 class _SuccessState extends State<Success> {
   late Stream<QuerySnapshot> ordersStream;
+  late String orderCode;
 
   @override
   void initState() {
     super.initState();
     // Query the FinalOrders collection based on the user's ID
     ordersStream = FirebaseFirestore.instance.collection("FinalOrders").where('userId', isEqualTo: widget.userId).snapshots();
+    orderCode = widget.orderCode;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Success'),
+        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder(
         stream: ordersStream,
@@ -52,27 +55,27 @@ class _SuccessState extends State<Success> {
           // Only one order is expected, so no need for ListView.builder
           DocumentSnapshot order = snapshot.data!.docs[0];
 
-          String orderCode = order['OrderID'];
+          //String orderCode = order['OrderID'];
 
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             //Section 1
 
-            const Image(image: AssetImage("images/success.gif"), width: 300, height: 350),
+            const Image(image: AssetImage("images/successful.gif"), width: 300, height: 350),
 
             //sectiion 2
             const Align(
               alignment: Alignment.center,
               child: Text(
-                "Payment Successful!",
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w800),
+                "Order Placed!",
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w300),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 0),
             Align(
               alignment: Alignment.center,
               child: Text(
-                'Order ID: ${order['OrderID']}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                'Order ID: $orderCode',
+                style: TextStyle(fontSize: 35),
               ),
             ),
             const SizedBox(
@@ -81,19 +84,19 @@ class _SuccessState extends State<Success> {
             const Align(
               alignment: Alignment.center,
               child: Text(
-                "\t\t\t\tYour order is being prepared!!! \n\t\t\t\tShow your OrderID at counter",
+                "\t\t\tYour order is being prepared!!! \n\t\t\t\tShow your OrderID at counter",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 70,
             ),
             SizedBox(
               height: 50,
               width: 300,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 203, 67, 25),
+                    backgroundColor: Color.fromARGB(255, 0, 0, 0),
                     foregroundColor: Color.fromARGB(255, 255, 255, 255),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))),
                 onPressed: () {

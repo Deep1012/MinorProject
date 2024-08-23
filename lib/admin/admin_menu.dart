@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -104,49 +105,128 @@ class _FoodItemTileState extends State<FoodItemTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30,
-          backgroundImage: NetworkImage(widget.foodItem['Image']),
+    return Dismissible(
+      key: Key(widget.foodItem.id), // Unique key for each dismissible widget
+      direction: DismissDirection.endToStart, // Swipe direction
+      background: Container(
+        color: Colors.red,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        alignment: AlignmentDirectional.centerEnd,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
         ),
-        title: Text(
-          widget.foodItem['Name'],
-          style: TextStyle(fontSize: 18),
+      ),
+      confirmDismiss: (direction) async {
+        return await _showConfirmationDialog(context);
+      },
+      onDismissed: (direction) {
+        _deleteItem();
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+          side: BorderSide(
+            color: Colors.black,
+            width: 1.0,
+          ),
         ),
-        subtitle: Text(
-          'Price: \₹${widget.foodItem['Price']}',
-          style: TextStyle(fontSize: 16),
-        ),
-        trailing: Switch(
-          value: isDisplayed,
-          onChanged: (value) {
-            setState(() {
-              isDisplayed = value;
-            });
-            _updateDisplayStatus(value);
-          },
+        color: Colors.white,
+        elevation: 4,
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(widget.foodItem['Image']),
+          ),
+          title: Text(
+            widget.foodItem['Name'],
+            style: TextStyle(fontSize: 18),
+          ),
+          subtitle: Text(
+            'Price: \₹${widget.foodItem['Price']}',
+            style: TextStyle(fontSize: 16),
+          ),
+          trailing: Switch(
+            activeColor: Colors.blue,
+            inactiveThumbColor: Colors.black,
+            
+            value: isDisplayed,
+            onChanged: (value) {
+              setState(() {
+                isDisplayed = value;
+              });
+              _updateDisplayStatus(value);
+            },
+          ),
         ),
       ),
     );
   }
 
-  // void _updateDisplayStatus(bool newValue) {
-  //   FirebaseFirestore.instance
-  //       .collection(widget.foodItem.reference.parent!.id)
-  //       .doc(widget.foodItem.id)
-  //       .update({
-  //     'isDisplayed': newValue,
-  //   });
-  // }
+  Future<bool?> _showConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        if (Theme.of(context).platform == TargetPlatform.iOS) {
+          return CupertinoAlertDialog(
+            title: Text('Delete Item'),
+            content: Text('Are you sure you want to delete this item?'),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Cancel deletion
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Delete'),
+                isDestructiveAction: true,
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Confirm deletion
+                },
+              ),
+            ],
+          );
+        } else {
+          return AlertDialog(
+            title: Text('Delete Item'),
+            content: Text('Are you sure you want to delete this item?'),
+            actions: [
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Cancel deletion
+                },
+              ),
+              TextButton(
+                child: Text('Delete'),
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Confirm deletion
+                },
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  void _deleteItem() {
+    FirebaseFirestore.instance
+        .collection("Food")
+        .doc("Category")
+        .collection(widget.foodItem.reference.parent.id)
+        .doc(widget.foodItem.id)
+        .delete();
+  }
+
   void _updateDisplayStatus(bool newValue) {
     FirebaseFirestore.instance
-    .collection("Food") 
-        .doc("Category") 
-        .collection(widget.foodItem.reference.parent.id)  
-        .doc(widget.foodItem.id) 
+        .collection("Food")
+        .doc("Category")
+        .collection(widget.foodItem.reference.parent.id)
+        .doc(widget.foodItem.id)
         .update({'isDisplayed': newValue});
   }
 }

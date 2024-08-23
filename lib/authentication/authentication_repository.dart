@@ -1,7 +1,6 @@
 import 'package:campuscrave/authentication/onboarding.dart';
 import 'package:campuscrave/authentication/login_screen.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -14,7 +13,7 @@ class AuthenticationRepository extends GetxController {
   /// Called from main.dart on app launch
   @override
   void onReady() {
-    FlutterNativeSplash.remove();
+   // FlutterNativeSplash.remove();
     screenRedirect();
   }
 
