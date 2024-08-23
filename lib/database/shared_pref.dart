@@ -6,6 +6,7 @@ class SharedPreferenceHelper {
   static String userEmailKey = "USEREMAILKEY";
   static String userProfileKey = "USERPROFILEKEY";
   static const String isLoggedInKey = 'isLoggedIn';
+  static const String isAdminLoggedInKey = 'isAdminLoggedIn';
 
   // Save user ID
   Future<bool> saveUserId(String getUserId) async {
@@ -67,6 +68,18 @@ class SharedPreferenceHelper {
     return prefs.getBool(isLoggedInKey) ?? false;
   }
 
+  // Save the login state of admin
+  static Future<void> setAdminLoggedIn(bool isAdminLoggedIn) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(isAdminLoggedInKey, isAdminLoggedIn);
+  }
+
+  // Check if the admin is logged in
+  static Future<bool> isAdminLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(isAdminLoggedInKey) ?? false;
+  }
+
   // Clear all user-related data and login state
   static Future<void> clearUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,5 +88,6 @@ class SharedPreferenceHelper {
     await prefs.remove(userEmailKey);
     await prefs.remove(userProfileKey);
     await prefs.setBool(isLoggedInKey, false);
+    await prefs.setBool(isAdminLoggedInKey, false);
   }
 }

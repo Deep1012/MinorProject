@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
 
           //column
           child: Padding(
-            padding: EdgeInsets.only(top: 80),
+            padding: EdgeInsets.only(top: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               

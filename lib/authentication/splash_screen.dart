@@ -1,8 +1,11 @@
-import 'package:campuscrave/authentication/onboarding.dart';
+import 'package:campuscrave/admin/admin_bottomnav.dart';
+import 'package:campuscrave/authentication/welcome.dart';
+import 'package:campuscrave/database/shared_pref.dart';
+import 'package:campuscrave/user/user_bottomnav.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:campuscrave/authentication/login_screen.dart'; // Make sure to import your login screen
-import 'package:campuscrave/user/user_bottomnav.dart'; // Make sure to import your main screen or home screen
+import 'package:get/get.dart';
+
+
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -17,38 +20,48 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
 
-    // Initialize the AnimationController
+    // Initialize the animation
     _controller = AnimationController(
-      duration: const Duration(seconds: 3), // Duration of the entire splash screen
+      duration: const Duration(seconds: 3), // Duration of the splash screen animation
       vsync: this,
     )..addListener(() {
         setState(() {});
       });
 
-    // Define the animation
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _controller!,
       curve: Curves.easeInOut,
     ));
 
-    // Start the animation
     _controller!.forward();
 
-    // Navigate to the next screen after the animation completes
-    Future.delayed(Duration(seconds: 3), () async {
-      final prefs = await SharedPreferences.getInstance();
-      final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    // Check login status after a delay
+    Future.delayed(Duration(seconds: 3), _checkLoginStatus);
+  }
 
-      if (isLoggedIn) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => BottomNav()), // Replace with your main screen
-        );
-      } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => OnboardScreen()), // Replace with your login screen
-        );
-      }
-    });
+  Future<void> _checkLoginStatus() async {
+    bool isAdminLoggedIn = await SharedPreferenceHelper.isAdminLoggedIn();
+    bool isLoggedIn = await SharedPreferenceHelper.isLoggedIn();
+
+    if (isAdminLoggedIn) {
+      _navigateToAdminHome();
+    } else if (isLoggedIn) {
+      _navigateToUserHome();
+    } else {
+      _navigateToWelcome();
+    }
+  }
+
+  void _navigateToAdminHome() {
+    Get.offAll(() => AdminBottomNav());
+  }
+
+  void _navigateToUserHome() {
+    Get.offAll(() => BottomNav());
+  }
+
+  void _navigateToWelcome() {
+    Get.offAll(() => WelcomeScreen());
   }
 
   @override

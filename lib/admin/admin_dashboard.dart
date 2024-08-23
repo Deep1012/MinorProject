@@ -1,8 +1,11 @@
 import 'package:campuscrave/admin/admin_addFood.dart';
 import 'package:campuscrave/admin/admin_completedOrders.dart';
+import 'package:campuscrave/authentication/welcome.dart';
 import 'package:campuscrave/database/database.dart';
+import 'package:campuscrave/database/shared_pref.dart';
 import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +28,55 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _fetchTotalUsers();
   }
 
+Future<void> _showConfirmationDialog(BuildContext context, String title, String content, VoidCallback onConfirm) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        if (Theme.of(context).platform == TargetPlatform.iOS) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text('Confirm'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onConfirm();
+                },
+              ),
+            ],
+          );
+        } else {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text('Confirm'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onConfirm();
+                },
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
   Future<void> _calculateTotalFoodItems() async {
     int count = 0;
     // Fetch food items from each category and sum up the counts
@@ -35,6 +87,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
     setState(() {
       totalFoodItems = count;
     });
+  }
+
+    void _logout() async {
+    await SharedPreferenceHelper.setAdminLoggedIn(false); // Set login state to false
+    Get.offAll(() => const WelcomeScreen()); // Navigate to LoginScreen
   }
 
   Future<void> _fetchTotalUsers() async {
@@ -51,6 +108,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
           appBar: AppBar(
             title: Text("Dashboard"),
             automaticallyImplyLeading: false,
+
+            actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              _showConfirmationDialog(
+                context,
+                'Log Out',
+                'Are you sure you want to log out?',
+                _logout,
+              );
+              
+            },
+          ),
+        ],
           ),
           body: SingleChildScrollView(
             child: Container(
