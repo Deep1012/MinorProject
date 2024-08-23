@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart'; // To format dates
 
 class CompletedOrdersPage extends StatefulWidget {
-  const CompletedOrdersPage({Key? key}) : super(key: key);
+  const CompletedOrdersPage({super.key});
 
   @override
   _CompletedOrdersPageState createState() => _CompletedOrdersPageState();
@@ -33,7 +33,7 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Completed Orders',
           style: TextStyle(fontSize: 25),
         ),
@@ -48,13 +48,13 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No completed orders found'),
             );
           }
@@ -85,11 +85,11 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                   Divider(color: Colors.grey[700], thickness: 1.0), // Dark grey line above the date
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    color: Color.fromARGB(255, 103, 160, 225),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    color: const Color.fromARGB(255, 103, 160, 225),
                     child: Text(
                       date,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ),
                   Divider(color: Colors.grey[700], thickness: 1.0), // Dark grey line below the date
@@ -97,8 +97,8 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                     DateTime timestamp = (order['date'] as Timestamp).toDate();
                     return Container(
                       width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      padding: EdgeInsets.all(16),
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -107,7 +107,7 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                             color: Colors.grey.withOpacity(0.2),
                             spreadRadius: 1,
                             blurRadius: 5,
-                            offset: Offset(0, 3), // changes position of shadow
+                            offset: const Offset(0, 3), // changes position of shadow
                           ),
                         ],
                       ),
@@ -116,9 +116,9 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                         children: [
                           Text(
                             'Order ID: ${order['OrderID']}',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -129,11 +129,11 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                                   children: [
                                     Text(
                                       'Name: ${order['itemName']}',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       'Quantity: ${order['quantity']}',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                   ],
                                 ),
@@ -145,11 +145,11 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                                   children: [
                                     Text(
                                       'Time: ${formatTime(timestamp)}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 14),
                                     ),
                                     Text(
                                       'Amount: ${order['total']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -162,7 +162,7 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               );
             },

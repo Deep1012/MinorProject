@@ -1,6 +1,5 @@
 import 'package:campuscrave/constants/other.dart';
 import 'package:campuscrave/authentication/onboard_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -14,7 +13,7 @@ class OnboardScreen extends StatelessWidget {
     final controller = Get.put(OnBoardingController());
 
     return Scaffold(
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: const Color(0xffffffff),
       body: Stack(
         children: [
           /// Horizontal Scrollable Pages
@@ -44,7 +43,7 @@ class OnboardScreen extends StatelessWidget {
           // dot navigator
           const onboardNavi(),
           // next circle button
-          onboardNext()
+          const onboardNext()
         ],
       ),
     );
@@ -64,7 +63,7 @@ class onboardNext extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () => OnBoardingController.instance.nextPage(),
           style:
-              ElevatedButton.styleFrom(shape: CircleBorder(), backgroundColor: Colors.blueAccent, foregroundColor: Colors.white),
+              ElevatedButton.styleFrom(shape: const CircleBorder(), backgroundColor: Colors.blueAccent, foregroundColor: Colors.white),
           child: const Icon(Iconsax.arrow_right_3)),
     );
   }
@@ -85,7 +84,7 @@ class onboardNavi extends StatelessWidget {
         controller: controller.pageController,
         onDotClicked: controller.dotNavigationClick,
         count: 3,
-        effect: ExpandingDotsEffect(activeDotColor: Colors.blueAccent, dotHeight: 5),
+        effect: const ExpandingDotsEffect(activeDotColor: Colors.blueAccent, dotHeight: 5),
       ),
     );
   }
@@ -103,8 +102,8 @@ class onboardSkip extends StatelessWidget {
       right: 10,
       child: TextButton(
         onPressed: () => OnBoardingController.instance.skipPage(),
-        child: const Text('Skip'),
         style: TextButton.styleFrom(foregroundColor: Colors.black, textStyle: const TextStyle(fontSize: 18)),
+        child: const Text('Skip'),
       ),
     );
   }

@@ -6,7 +6,7 @@ class Success extends StatefulWidget {
   final String userId;
   final String orderCode; // Receive the user ID as a parameter
 
-  const Success({Key? key, required this.userId, required this.orderCode}) : super(key: key);
+  const Success({super.key, required this.userId, required this.orderCode});
 
   @override
   _SuccessState createState() => _SuccessState();
@@ -41,13 +41,13 @@ class _SuccessState extends State<Success> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No orders available.'),
             );
           }
@@ -70,12 +70,12 @@ class _SuccessState extends State<Success> {
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.w300),
               ),
             ),
-            SizedBox(height: 0),
+            const SizedBox(height: 0),
             Align(
               alignment: Alignment.center,
               child: Text(
                 'Order ID: $orderCode',
-                style: TextStyle(fontSize: 35),
+                style: const TextStyle(fontSize: 35),
               ),
             ),
             const SizedBox(
@@ -88,7 +88,7 @@ class _SuccessState extends State<Success> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 70,
             ),
             SizedBox(
@@ -96,8 +96,8 @@ class _SuccessState extends State<Success> {
               width: 300,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 0, 0, 0),
-                    foregroundColor: Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                    foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNav()));

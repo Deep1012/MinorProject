@@ -8,7 +8,7 @@ import 'package:campuscrave/database/shared_pref.dart';
 import 'package:random_string/random_string.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -147,7 +147,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Container(
           padding: const EdgeInsets.all(20),
           child: Padding(
-            padding: EdgeInsets.only(top: 70),
+            padding: const EdgeInsets.only(top: 70),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -283,7 +283,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
                 labelText: "Password",
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: _togglePasswordVisibility,
                   icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),

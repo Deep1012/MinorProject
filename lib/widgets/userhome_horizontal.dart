@@ -74,7 +74,7 @@ class userhome_horizontal extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            "\₹${ds["Price"]}",
+                            "₹${ds["Price"]}",
                             style: AppWidget.semiBoldTextFieldStyle(),
                             overflow: TextOverflow.ellipsis,
                           )

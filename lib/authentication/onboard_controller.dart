@@ -1,5 +1,4 @@
 
-import 'package:campuscrave/admin/admin_bottomnav.dart';
 import 'package:campuscrave/authentication/welcome.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +43,7 @@ class OnBoardingController extends GetxController {
   void skipPage(){
     //currentPageIndex.value=2;
     //pageController.jumpToPage(2);
-    Get.to(() => WelcomeScreen());
+    Get.to(() => const WelcomeScreen());
 
   }
 }

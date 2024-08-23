@@ -4,7 +4,7 @@ import 'package:campuscrave/admin/admin_addFood.dart';
 import 'package:campuscrave/admin/admin_menu.dart';
 
 class HomeAdmin extends StatefulWidget {
-  const HomeAdmin({Key? key}) : super(key: key);
+  const HomeAdmin({super.key});
 
   @override
   _HomeAdminState createState() => _HomeAdminState();

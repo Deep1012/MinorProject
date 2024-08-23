@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -36,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller!.forward();
 
     // Check login status after a delay
-    Future.delayed(Duration(seconds: 3), _checkLoginStatus);
+    Future.delayed(const Duration(seconds: 3), _checkLoginStatus);
   }
 
   Future<void> _checkLoginStatus() async {
@@ -53,15 +55,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   void _navigateToAdminHome() {
-    Get.offAll(() => AdminBottomNav());
+    Get.offAll(() => const AdminBottomNav());
   }
 
   void _navigateToUserHome() {
-    Get.offAll(() => BottomNav());
+    Get.offAll(() => const BottomNav());
   }
 
   void _navigateToWelcome() {
-    Get.offAll(() => WelcomeScreen());
+    Get.offAll(() => const WelcomeScreen());
   }
 
   @override

@@ -3,7 +3,6 @@ import 'dart:io'; // Import for platform detection
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:campuscrave/database/database.dart';
 import 'package:campuscrave/database/shared_pref.dart';
@@ -15,7 +14,7 @@ import 'package:intl/intl.dart';
 final formatter = DateFormat.yMd();
 
 class Order extends StatefulWidget {
-  const Order({Key? key}) : super(key: key);
+  const Order({super.key});
 
   @override
   State<Order> createState() => _OrderState();
@@ -35,7 +34,7 @@ class _OrderState extends State<Order> {
   String? name;
   int total = 0;
   final now = DateTime.now();
-  var _razorpay = Razorpay();
+  final _razorpay = Razorpay();
   late String orderCode;
   bool isLoading = true; // Add a loading state
   bool? isOpen;
@@ -129,16 +128,16 @@ class _OrderState extends State<Order> {
       return await showCupertinoDialog<bool>(
             context: context,
             builder: (context) => CupertinoAlertDialog(
-              title: Text('Confirm Removal'),
-              content: Text('Are you sure you want to remove this item from the cart?'),
+              title: const Text('Confirm Removal'),
+              content: const Text('Are you sure you want to remove this item from the cart?'),
               actions: [
                 CupertinoDialogAction(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
                 CupertinoDialogAction(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: Text('Remove'),
+                  child: const Text('Remove'),
                 ),
               ],
             ),
@@ -148,16 +147,16 @@ class _OrderState extends State<Order> {
       return await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Confirm Removal'),
-              content: Text('Are you sure you want to remove this item from the cart?'),
+              title: const Text('Confirm Removal'),
+              content: const Text('Are you sure you want to remove this item from the cart?'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: Text('Remove'),
+                  child: const Text('Remove'),
                 ),
               ],
             ),
@@ -189,14 +188,14 @@ class _OrderState extends State<Order> {
                   if (result == true) {
                     await _deleteItemFromCart(ds);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Item removed from cart')),
+                      const SnackBar(content: Text('Item removed from cart')),
                     );
                     return true;
                   } else {
                     // Restore the item if cancellation is chosen
                     await _restoreItem(ds);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Item restored')),
+                      const SnackBar(content: Text('Item restored')),
                     );
                     return false;
                   }
@@ -204,8 +203,8 @@ class _OrderState extends State<Order> {
                 background: Container(
                   color: Colors.red,
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Icon(Icons.delete, color: Colors.white),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
                 ),
                 child: Container(
                   margin: const EdgeInsets.only(
@@ -238,7 +237,7 @@ class _OrderState extends State<Order> {
                                       ),
                                       const SizedBox(height: 10),
                                       Text(
-                                        "\₹" + ds["Total"],
+                                        "₹" + ds["Total"],
                                         style: AppWidget.semiBoldTextFieldStyle(),
                                       ),
                                     ],
@@ -253,7 +252,7 @@ class _OrderState extends State<Order> {
                                   onPressed: () {
                                     // Decrement action
                                   },
-                                  icon: Icon(Icons.remove),
+                                  icon: const Icon(Icons.remove),
                                 ),
                                 Container(
                                   height: 40,
@@ -270,7 +269,7 @@ class _OrderState extends State<Order> {
                                   onPressed: () {
                                     // Increment action
                                   },
-                                  icon: Icon(Icons.add),
+                                  icon: const Icon(Icons.add),
                                 ),
                               ],
                             ),
@@ -282,7 +281,7 @@ class _OrderState extends State<Order> {
             },
           );
         } else {
-          return Center(child: const CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );
@@ -292,7 +291,7 @@ class _OrderState extends State<Order> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading || isOpen == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : isOpen == true // Check if the canteen is open
               ? Container(
                   padding: const EdgeInsets.only(top: 10.0),
@@ -302,8 +301,8 @@ class _OrderState extends State<Order> {
                       const SizedBox(
                         height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
                         child: Text(
                           "Food Cart",
                           style: TextStyle(
@@ -312,7 +311,7 @@ class _OrderState extends State<Order> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: MediaQuery.of(context).size.height / 2,
                         child: foodCart(),
                       ),
@@ -328,7 +327,7 @@ class _OrderState extends State<Order> {
                               style: AppWidget.semiBoldTextFieldStyle(),
                             ),
                             Text(
-                              "\₹" + total.toString(),
+                              "₹$total",
                               style: AppWidget.semiBoldTextFieldStyle(),
                             )
                           ],
@@ -427,13 +426,13 @@ class _OrderState extends State<Order> {
     if (id != null) {
       var items = <Map<String, dynamic>>[];
       await FirebaseFirestore.instance.collection("Users").doc(id!).collection("Cart").get().then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
+        for (var doc in querySnapshot.docs) {
           items.add({
             'itemName': doc['Name'],
             'quantity': doc['Quantity'],
             'total': doc['Total'],
           });
-        });
+        }
       });
       if (items.isNotEmpty) {
         await DatabaseMethods().placeOrder(now, id!, orderCode, total, items, code1.code);
@@ -445,13 +444,13 @@ class _OrderState extends State<Order> {
     if (id != null) {
       var Storeitems = <Map<String, dynamic>>[];
       await FirebaseFirestore.instance.collection("Users").doc(id!).collection("Cart").get().then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
+        for (var doc in querySnapshot.docs) {
           Storeitems.add({
             'itemName': doc['Name'],
             'quantity': doc['Quantity'],
             'total': doc['Total'],
           });
-        });
+        }
       });
       if (Storeitems.isNotEmpty) {
         await DatabaseMethods().StoreOrder(now, id!, orderCode, total, Storeitems, code1.code);

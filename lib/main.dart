@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:campuscrave/database/firebase_options.dart';
 import 'package:campuscrave/authentication/splash_screen.dart'; // Import your splash screen
 import 'package:campuscrave/authentication/onboarding.dart';
-import 'package:campuscrave/authentication/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 
 void main() async {
@@ -15,13 +14,15 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreenWrapper(),
     );
@@ -29,6 +30,8 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreenWrapper extends StatefulWidget {
+  const SplashScreenWrapper({super.key});
+
   @override
   _SplashScreenWrapperState createState() => _SplashScreenWrapperState();
 }
@@ -42,7 +45,7 @@ class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
 
   Future<void> _startSplashScreen() async {
     // Wait for 3 seconds before navigating
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
 
     // Check if the user is logged in
     User? user = FirebaseAuth.instance.currentUser;
@@ -50,15 +53,15 @@ class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
     // Navigate to the appropriate screen
     if (user != null) {
       // User is logged in
-      Get.off(() => BottomNav()); // Change this to your main screen if needed
+      Get.off(() => const BottomNav()); // Change this to your main screen if needed
     } else {
       // User is not logged in
-      Get.off(() => OnboardScreen());
+      Get.off(() => const OnboardScreen());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SplashScreen(); // Display the splash screen
+    return const SplashScreen(); // Display the splash screen
   }
 }

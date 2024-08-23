@@ -1,16 +1,14 @@
-import 'package:campuscrave/admin/admin_addFood.dart';
 import 'package:campuscrave/admin/admin_completedOrders.dart';
 import 'package:campuscrave/authentication/welcome.dart';
 import 'package:campuscrave/database/database.dart';
 import 'package:campuscrave/database/shared_pref.dart';
-import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AdminDashboard extends StatefulWidget {
-  const AdminDashboard({Key? key}) : super(key: key);
+  const AdminDashboard({super.key});
 
   @override
   _AdminDashboardState createState() => _AdminDashboardState();
@@ -106,7 +104,7 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
     return 
          Scaffold(
           appBar: AppBar(
-            title: Text("Dashboard"),
+            title: const Text("Dashboard"),
             automaticallyImplyLeading: false,
 
             actions: [
@@ -274,7 +272,7 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
           
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            if ('$title' == "Completed") {
+            if (title == "Completed") {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const CompletedOrdersPage()));
             }
 

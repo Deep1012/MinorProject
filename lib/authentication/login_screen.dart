@@ -5,7 +5,7 @@ import 'package:campuscrave/authentication/signin_screen.dart';
 import 'package:campuscrave/database/shared_pref.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _togglePasswordVisibility,
                             icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                           ),
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -136,7 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _login,
-                        child: const Text("Log In", style: TextStyle(fontSize: 18),),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                           backgroundColor: const Color.fromARGB(226, 0, 0, 0),
@@ -145,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
+                        child: const Text("Log In", style: TextStyle(fontSize: 18),),
                       ),
                       const SizedBox(height: 20),
                       GestureDetector(

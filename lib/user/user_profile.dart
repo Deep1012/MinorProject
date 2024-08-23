@@ -8,7 +8,7 @@ import 'package:campuscrave/database/shared_pref.dart';
 import 'package:campuscrave/user/user_feedback.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -101,7 +101,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
+        title: const Text(
           'Profile',
           style: TextStyle(
             fontFamily: 'SF Pro Text',
@@ -127,17 +127,17 @@ class _ProfileState extends State<Profile> {
                         foregroundColor: Colors.black,
                         elevation: 2.0,
                         padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                        side: BorderSide(color: Colors.black, width: 2),
+                        side: const BorderSide(color: Colors.black, width: 2),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () {
-                        Get.to(() => PastOrdersPage()); // Navigate to FeedbackPage
+                        Get.to(() => const PastOrdersPage()); // Navigate to FeedbackPage
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.list, color: Colors.black),
-                          const SizedBox(width: 20.0),
-                          const Text(
+                          SizedBox(width: 20.0),
+                          Text(
                             'Past Orders',
                             style: TextStyle(
                               fontFamily: 'SF Pro Text',
@@ -156,17 +156,17 @@ class _ProfileState extends State<Profile> {
                         foregroundColor: Colors.black,
                         elevation: 2.0,
                         padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                        side: BorderSide(color: Colors.black, width: 2),
+                        side: const BorderSide(color: Colors.black, width: 2),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () {
-                        Get.to(() => FeedbackPage()); // Navigate to FeedbackPage
+                        Get.to(() => const FeedbackPage()); // Navigate to FeedbackPage
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.star_rate_rounded, color: Colors.black),
-                          const SizedBox(width: 20.0),
-                          const Text(
+                          SizedBox(width: 20.0),
+                          Text(
                             'User Feedbacks',
                             style: TextStyle(
                               fontFamily: 'SF Pro Text',
@@ -185,7 +185,7 @@ class _ProfileState extends State<Profile> {
                         foregroundColor: Colors.red,
                         elevation: 2.0,
                         padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                        side: BorderSide(color: Colors.red, width: 2),
+                        side: const BorderSide(color: Colors.red, width: 2),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () {
@@ -196,11 +196,11 @@ class _ProfileState extends State<Profile> {
                           _deleteAccount,
                         );
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.delete, color: Colors.red),
-                          const SizedBox(width: 20.0),
-                          const Text(
+                          SizedBox(width: 20.0),
+                          Text(
                             'Delete Account',
                             style: TextStyle(
                               fontFamily: 'SF Pro Text',
@@ -219,7 +219,7 @@ class _ProfileState extends State<Profile> {
                         foregroundColor: Colors.blue,
                         elevation: 2.0,
                         padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                        side: BorderSide(color: Colors.blue, width: 2),
+                        side: const BorderSide(color: Colors.blue, width: 2),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () {
@@ -230,11 +230,11 @@ class _ProfileState extends State<Profile> {
                           _logout,
                         );
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.logout, color: Colors.blue),
-                          const SizedBox(width: 20.0),
-                          const Text(
+                          SizedBox(width: 20.0),
+                          Text(
                             'Log Out',
                             style: TextStyle(
                               fontFamily: 'SF Pro Text',

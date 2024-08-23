@@ -1,4 +1,3 @@
-import "package:campuscrave/admin/admin_bottomnav.dart";
 import "package:campuscrave/admin/admin_login.dart";
 
 import "package:campuscrave/authentication/login_screen.dart";
@@ -17,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
 
           //column
           child: Padding(
-            padding: EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.only(top: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               
@@ -66,8 +65,8 @@ class WelcomeScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(119, 25, 134, 230),
-                          foregroundColor: Color.fromARGB(255, 255, 255, 255),
+                          backgroundColor: const Color.fromARGB(119, 25, 134, 230),
+                          foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))),
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));

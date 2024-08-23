@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MenuViewPage extends StatelessWidget {
-  const MenuViewPage({Key? key}) : super(key: key);
+  const MenuViewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class MenuViewPage extends StatelessWidget {
 class CategorySection extends StatelessWidget {
   final String category;
 
-  const CategorySection({required this.category});
+  const CategorySection({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class CategorySection extends StatelessWidget {
 class FoodItemTile extends StatefulWidget {
   final QueryDocumentSnapshot foodItem;
 
-  const FoodItemTile({required this.foodItem});
+  const FoodItemTile({super.key, required this.foodItem});
 
   @override
   _FoodItemTileState createState() => _FoodItemTileState();
@@ -110,9 +110,9 @@ class _FoodItemTileState extends State<FoodItemTile> {
       direction: DismissDirection.endToStart, // Swipe direction
       background: Container(
         color: Colors.red,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         alignment: AlignmentDirectional.centerEnd,
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
         ),
@@ -126,14 +126,14 @@ class _FoodItemTileState extends State<FoodItemTile> {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
-          side: BorderSide(
+          side: const BorderSide(
             color: Colors.black,
             width: 1.0,
           ),
         ),
         color: Colors.white,
         elevation: 4,
-        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: ListTile(
           leading: CircleAvatar(
             radius: 30,
@@ -141,11 +141,11 @@ class _FoodItemTileState extends State<FoodItemTile> {
           ),
           title: Text(
             widget.foodItem['Name'],
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
           subtitle: Text(
-            'Price: \₹${widget.foodItem['Price']}',
-            style: TextStyle(fontSize: 16),
+            'Price: ₹${widget.foodItem['Price']}',
+            style: const TextStyle(fontSize: 16),
           ),
           trailing: Switch(
             activeColor: Colors.blue,
@@ -170,37 +170,37 @@ class _FoodItemTileState extends State<FoodItemTile> {
       builder: (context) {
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           return CupertinoAlertDialog(
-            title: Text('Delete Item'),
-            content: Text('Are you sure you want to delete this item?'),
+            title: const Text('Delete Item'),
+            content: const Text('Are you sure you want to delete this item?'),
             actions: [
               CupertinoDialogAction(
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop(false); // Cancel deletion
                 },
               ),
               CupertinoDialogAction(
-                child: Text('Delete'),
                 isDestructiveAction: true,
                 onPressed: () {
                   Navigator.of(context).pop(true); // Confirm deletion
                 },
+                child: const Text('Delete'),
               ),
             ],
           );
         } else {
           return AlertDialog(
-            title: Text('Delete Item'),
-            content: Text('Are you sure you want to delete this item?'),
+            title: const Text('Delete Item'),
+            content: const Text('Are you sure you want to delete this item?'),
             actions: [
               TextButton(
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop(false); // Cancel deletion
                 },
               ),
               TextButton(
-                child: Text('Delete'),
+                child: const Text('Delete'),
                 onPressed: () {
                   Navigator.of(context).pop(true); // Confirm deletion
                 },

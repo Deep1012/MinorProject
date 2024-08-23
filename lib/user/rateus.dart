@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RateUs extends StatefulWidget {
-  const RateUs({Key? key}) : super(key: key);
+  const RateUs({super.key});
 
   @override
   State<RateUs> createState() => _RateUsState();
@@ -14,46 +14,47 @@ class _RateUsState extends State<RateUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rate Us'),
+        title: const Text('Rate Us'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Rate Our App',
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             _buildStarRating(),
-            SizedBox(height: 40.0),
+            const SizedBox(height: 40.0),
             ElevatedButton(
               onPressed: _rating != null ? _submitRating : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Text(
-                  'Submit',
-                  style: TextStyle(fontSize: 18.0),
-                ),
-              ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
+                backgroundColor: WidgetStateProperty.all<Color>(
                     Colors.white), // Background color
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(30.0), // Rounded corners
                   ),
                 ),
-                elevation: MaterialStateProperty.all<double>(5.0), // Shadow
-                overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed))
+                elevation: WidgetStateProperty.all<double>(5.0), // Shadow
+                overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.pressed)) {
                       return Colors.deepPurpleAccent.withOpacity(
                           0.5); // Change to accent color when pressed
+                    }
                     return null; // Use the default overlay color
                   },
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 18.0),
                 ),
               ),
             ),
@@ -100,7 +101,7 @@ class _RateUsState extends State<RateUs> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Thank You!'),
+            title: const Text('Thank You!'),
             content: Text(
                 'Thank you for rating us $_rating stars! Your feedback is valuable to us.'),
             actions: <Widget>[
@@ -108,7 +109,7 @@ class _RateUsState extends State<RateUs> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('Close'),
+                child: const Text('Close'),
               ),
             ],
           );
@@ -119,7 +120,7 @@ class _RateUsState extends State<RateUs> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: RateUs(),
   ));
 }

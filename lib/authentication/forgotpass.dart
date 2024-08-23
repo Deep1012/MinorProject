@@ -10,7 +10,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  TextEditingController mailcontroller = new TextEditingController();
+  TextEditingController mailcontroller = TextEditingController();
 
   String email = "";
 
@@ -149,7 +149,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              SignUpScreen()));
+                                              const SignUpScreen()));
                                 },
                                 child: const Text(
                                   "Create",
