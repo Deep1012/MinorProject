@@ -71,29 +71,39 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double imageHeight = screenHeight * 0.3; // 30% of screen height
+    final double imageWidth = screenWidth * 0.8; // 80% of screen width
+    final double titleFontSize = screenWidth * 0.09; // 9% of screen width
+    final double subtitleFontSize = screenWidth * 0.05; // 5% of screen width
+    final double buttonHeight = screenHeight * 0.07; // 7% of screen height
+    final double buttonFontSize = screenWidth * 0.05; // 5% of screen width
+    final double padding = screenWidth * 0.05; // 5% of screen width
+
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(padding),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Image(
-                  image: AssetImage("images/LoginIMG.png"),
-                  width: 300,
-                  height: 240,
+                Image(
+                  image: const AssetImage("images/LoginIMG.png"),
+                  width: imageWidth,
+                  height: imageHeight,
                 ),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                Text(
                   "Greetings!!",
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.w600),
                 ),
-                const Text(
+                Text(
                   "Log in to continue",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: subtitleFontSize),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: screenHeight * 0.04), // 4% of screen height
                 Form(
                   key: _formKey,
                   child: Column(
@@ -113,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 15),
+                      SizedBox(height: screenHeight * 0.02), // 2% of screen height
                       TextFormField(
                         controller: _passwordController,
                         obscureText: !_passwordVisible,
@@ -124,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _togglePasswordVisibility,
                             icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                           ),
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -133,20 +143,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenHeight * 0.03), // 3% of screen height
                       ElevatedButton(
                         onPressed: _login,
-                        child: const Text("Log In", style: TextStyle(fontSize: 18),),
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                          padding: EdgeInsets.symmetric(
+                            vertical: buttonHeight * 0.2,
+                            horizontal: screenWidth * 0.25,
+                          ),
                           backgroundColor: const Color.fromARGB(226, 0, 0, 0),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
+                        child: Text("Login", style: TextStyle(fontSize: buttonFontSize)),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenHeight * 0.03), // 3% of screen height
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -154,9 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             MaterialPageRoute(builder: (context) => const SignUpScreen()),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           "Don't have an account? Sign Up",
-                          style: TextStyle(fontSize: 15, color: Colors.blue),
+                          style: TextStyle(fontSize: subtitleFontSize, color: Colors.blue),
                         ),
                       ),
                     ],

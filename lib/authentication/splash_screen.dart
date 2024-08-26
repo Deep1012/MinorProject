@@ -5,8 +5,6 @@ import 'package:campuscrave/user/user_bottomnav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();

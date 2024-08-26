@@ -51,7 +51,7 @@ class DatabaseMethods {
     }
   }
 
-  
+
 
   Future<Stream<QuerySnapshot>?> getFoodCart(String id) async {
     try {
