@@ -1,5 +1,6 @@
 import 'package:campuscrave/admin/admin_addFood.dart';
 import 'package:campuscrave/admin/admin_completedOrders.dart';
+import 'package:campuscrave/admin/admin_earnings.dart';
 import 'package:campuscrave/authentication/welcome.dart';
 import 'package:campuscrave/database/database.dart';
 import 'package:campuscrave/database/shared_pref.dart';
@@ -320,6 +321,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
           onTap: () {
             if ('$title' == "Completed") {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const CompletedOrdersPage()));
+            }else if ('$title' == "Earnings") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminEarnings()));
             }
 
             // Handle the tap event here
