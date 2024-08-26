@@ -6,7 +6,6 @@ import 'package:campuscrave/widgets/widget_support.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,7 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool icecream = false, pizza = false, salad = false, burger = false;
-  bool? isOpen; // Changed to nullable to handle loading state
+  bool? isOpen; // Nullable to handle loading state
   Stream? fooditemStream;
   String? name;
 
@@ -48,118 +47,127 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
 
-    return Scaffold(
-      body: isOpen == null
-          ? const Center(child: CircularProgressIndicator()) // Show loading indicator while fetching `isOpen`
-          : isOpen!
-              ? SingleChildScrollView(
-                  child: Container(
-                    height: screenHeight,
-                    width: screenWidth,
-                    margin: const EdgeInsets.only(top: 50.0, left: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return Scaffold(
+          body: isOpen == null
+              ? const Center(child: CircularProgressIndicator())
+              : isOpen!
+                  ? SingleChildScrollView(
+                      child: Container(
+                        height: screenHeight * 1.3,
+                        width: screenWidth,
+                        margin: const EdgeInsets.only(top: 30.0, left: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            name == null
-                                ? const Center(child: CircularProgressIndicator())
-                                : Padding(
-                                    padding: const EdgeInsets.only(top: 30),
-                                    child: Text(
-                                      "Welcome!!",
-                                      style: AppWidget.boldTextFieldStyle(),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                name == null
+                                    ? const Center(child: CircularProgressIndicator())
+                                    : Padding(
+                                        padding: EdgeInsets.only(top: screenHeight * 0.03),
+                                        child: Text(
+                                          "Welcome!!",
+                                          style: AppWidget.boldTextFieldStyle(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                Container(
+                                  margin: EdgeInsets.only(right: screenWidth * 0.07, top: screenHeight * 0.03),
+                                  padding: EdgeInsets.all(screenWidth * 0.008),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
+                                  child: Image.asset(
+                                    "images/nuvLogo.png",
+                                    height: screenHeight * 0.07,
+                                    width: screenWidth * 0.1,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: screenHeight * 0.01),
+                            Text(
+                              "NUV Canteen",
+                              style: AppWidget.HeadTextFieldStyle(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "Order beforehand to skip the wait!!",
+                              style: AppWidget.LightTextFieldStyle(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: screenHeight * 0.02),
+                            showItem(screenWidth),
+                            SizedBox(height: screenHeight * 0.02),
                             Container(
-                              margin: const EdgeInsets.only(right: 30.0, top: 20),
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+                              margin: EdgeInsets.only(right: screenWidth * 0.05),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(screenWidth * 0.025),
+                                child: Image.asset("images/home_ordernow.png"),
                               ),
-                              child: Image.asset(
-                                "images/nuvLogo.png",
-                                height: 60,
-                                width: 40,
-                                fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: screenHeight * 0.03),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: userhome_vertical(fooditemStream: fooditemStream),
                               ),
-                            )
+                            ),
+                            
                           ],
                         ),
-                        const SizedBox(height: 10.0),
-                        Text(
-                          "NUV Canteen",
-                          style: AppWidget.HeadTextFieldStyle(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          "Order beforehand to skip the wait!!",
-                          style: AppWidget.LightTextFieldStyle(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 20.0),
-                        showItem(),
-                        const SizedBox(height: 20.0),
-                        Container(
-                          margin: const EdgeInsets.only(right: 20.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0), // Set the border radius here
-                            child: Image.asset("images/home_ordernow.png"),
+                      ),
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "images/sorry.gif",
+                            height: screenHeight * 0.4,
+                            width: screenWidth * 0.8,
+                            alignment: Alignment.center,
                           ),
-                        ),
-                        const SizedBox(height: 30.0),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: userhome_vertical(fooditemStream: fooditemStream),
+                          SizedBox(height: screenHeight * 0.03),
+                          const Text(
+                            "Sorry, Canteen is closed.",
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        const SizedBox(height: 20.0),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      
-                      Image.asset(
-                        "images/sorry.gif",
-                        height: 300,
-                        width: 300,
-                        alignment: Alignment.center,
-                      ),
-                      const SizedBox(height: 20.0), // Add spacing between the image and the text
-                      const Text(
-                        "Sorry, Canteen is closed.",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.center, // Center the text within its own box
-                      ),
-                    ],
-                  ),
-                ),
+        );
+      },
     );
   }
 
-  Widget showItem() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        foodCategoryItem("Burger", "images/burger.png", burger),
-        foodCategoryItem("Salad", "images/salad.png", salad),
-        foodCategoryItem("Ice-cream", "images/ice-cream.png", icecream),
-        foodCategoryItem("Pizza", "images/pizza.png", pizza),
-      ],
+  Widget showItem(double screenWidth) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          foodCategoryItem("Burger", "images/burger.png", burger, screenWidth),
+          SizedBox(width: screenWidth * 0.06),
+          foodCategoryItem("Salad", "images/salad.png", salad, screenWidth),
+          SizedBox(width: screenWidth * 0.06),
+          foodCategoryItem("Ice-cream", "images/ice-cream.png", icecream, screenWidth),
+          SizedBox(width: screenWidth * 0.06),
+          foodCategoryItem("Pizza", "images/pizza.png", pizza, screenWidth),
+          SizedBox(width: screenWidth * 0.0),
+        ],
+      ),
     );
   }
 
-  Widget foodCategoryItem(String category, String asset, bool isSelected) {
+  Widget foodCategoryItem(String category, String asset, bool isSelected, double screenWidth) {
     return GestureDetector(
       onTap: () async {
         setState(() {
@@ -173,17 +181,17 @@ class _HomeState extends State<Home> {
       },
       child: Material(
         elevation: 5.0,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(screenWidth * 0.025),
         child: Container(
           decoration: BoxDecoration(
             color: isSelected ? Colors.black : Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(screenWidth * 0.025),
           ),
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(screenWidth * 0.03),
           child: Image.asset(
             asset,
-            height: 50,
-            width: 50,
+            height: screenWidth * 0.12,
+            width: screenWidth * 0.12,
             fit: BoxFit.cover,
             color: isSelected ? Colors.white : Colors.black,
           ),

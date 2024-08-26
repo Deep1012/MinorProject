@@ -32,36 +32,48 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: CurvedNavigationBar(
-          height: 65,
-          backgroundColor: Colors.white,
-          color: Colors.black,
-          animationDuration: const Duration(milliseconds: 500),
-          onTap: (int index) {
-            setState(() {
-              currentTabIndex = index;
-            });
-          },
-          items: const [
-            Icon(
-              Icons.home_outlined,
-              color: Colors.white,
-            ),
-            Icon(
-              Icons.shopping_cart,
-              color: Colors.white,
-            ),
-            Icon(
-              Icons.person_outline,
-              color: Colors.white,
-            )
-          ]),
-      body: SafeArea(
-        top: false,
+    // Get the screen dimensions to make the UI responsive
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return SafeArea(
+      
         bottom: true,
-        child: pages[currentTabIndex],
-      ),
-    );
+        top: false,
+        child: Scaffold(
+          bottomNavigationBar: CurvedNavigationBar(
+            height: screenHeight * 0.07, // Adjust the height based on the screen height
+            backgroundColor: Colors.white,
+            color: Colors.black,
+            animationDuration: const Duration(milliseconds: 500),
+            onTap: (int index) {
+              setState(() {
+                currentTabIndex = index;
+              });
+            },
+            items: [
+              Icon(
+                Icons.home_outlined,
+                color: Colors.white,
+                size: screenWidth * 0.06, // Adjust icon size based on the screen width
+              ),
+              Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+                size: screenWidth * 0.06, // Adjust icon size based on the screen width
+              ),
+              Icon(
+                Icons.person_outline,
+                color: Colors.white,
+                size: screenWidth * 0.06, // Adjust icon size based on the screen width
+              ),
+            ],
+          ),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: pages[currentTabIndex],
+          ),
+        ));
   }
 }

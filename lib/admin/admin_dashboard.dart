@@ -19,6 +19,7 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   int totalFoodItems = 0;
   int totalUsers = 0;
+  double totalEarnings = 0.0; // Add this variable to hold today's earnings
 
   @override
   void initState() {
@@ -26,9 +27,58 @@ class _AdminDashboardState extends State<AdminDashboard> {
     // Call methods to fetch data
     _calculateTotalFoodItems();
     _fetchTotalUsers();
+    _fetchTodayEarnings(); // Fetch today's earnings
   }
 
-Future<void> _showConfirmationDialog(BuildContext context, String title, String content, VoidCallback onConfirm) {
+ Future<void> _fetchTodayEarnings() async {
+    DateTime now = DateTime.now();
+    DateTime startOfDay = DateTime(now.year, now.month, now.day, 0, 0, 0); // Start of the day
+    DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59, 999); // End of the day
+
+    // Convert to Firestore Timestamp
+    Timestamp startTimestamp = Timestamp.fromDate(startOfDay);
+    Timestamp endTimestamp = Timestamp.fromDate(endOfDay);
+
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection("CompletedOrders")
+          .where('date', isGreaterThanOrEqualTo: startTimestamp)
+          .where('date', isLessThanOrEqualTo: endTimestamp)
+          .get();
+
+      print('Query snapshot size: ${snapshot.size}'); // Debug print
+
+      double earnings = 0.0;
+      for (var doc in snapshot.docs) {
+        print('Document ID: ${doc.id}'); // Debug print
+        print('Document data: ${doc.data()}'); // Debug print
+
+        if (doc['total'] != null) {
+          // Handle `total` as a String
+          try {
+            earnings += double.parse(doc['total'].toString());
+          } catch (e) {
+            print('Error parsing total value in document ${doc.id}: $e');
+          }
+        } else {
+          print('Total field is null in document: ${doc.id}');
+        }
+      }
+
+      setState(() {
+        totalEarnings = earnings;
+      });
+
+      print('Total earnings for today: $totalEarnings'); // Debug print
+    } catch (e) {
+      print('Error fetching earnings: $e');
+    }
+  }
+
+
+
+
+  Future<void> _showConfirmationDialog(BuildContext context, String title, String content, VoidCallback onConfirm) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -89,7 +139,7 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
     });
   }
 
-    void _logout() async {
+  void _logout() async {
     await SharedPreferenceHelper.setAdminLoggedIn(false); // Set login state to false
     Get.offAll(() => const WelcomeScreen()); // Navigate to LoginScreen
   }
@@ -103,13 +153,11 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
 
   @override
   Widget build(BuildContext context) {
-    return 
-         Scaffold(
-          appBar: AppBar(
-            title: Text("Dashboard"),
-            automaticallyImplyLeading: false,
-
-            actions: [
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Dashboard"),
+        automaticallyImplyLeading: false,
+        actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
@@ -119,42 +167,40 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
                 'Are you sure you want to log out?',
                 _logout,
               );
-              
             },
           ),
         ],
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  
-                  GridView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    padding: const EdgeInsets.only(top: 12.0),
-                    itemCount: _dashboardItem.length,
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 230,
-                      mainAxisSpacing: 20.0,
-                      crossAxisSpacing: 20.0,
-                      childAspectRatio: 1.0,
-                    ),
-                    itemBuilder: (context, index) {
-                      return _buildGridItem(
-                        title: _dashboardItem[index]['title'],
-                        subtitle: _dashboardItem[index]['subtitle'],
-                        icon: _dashboardItem[index]['icon'],
-                      );
-                    },
-                  ),
-                ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                primary: false,
+                padding: const EdgeInsets.only(top: 12.0),
+                itemCount: _dashboardItem.length,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 230,
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+                  childAspectRatio: 1.0,
+                ),
+                itemBuilder: (context, index) {
+                  return _buildGridItem(
+                    title: _dashboardItem[index]['title'],
+                    subtitle: _dashboardItem[index]['subtitle'],
+                    icon: _dashboardItem[index]['icon'],
+                  );
+                },
               ),
-            ),
+            ],
           ),
-        );
+        ),
+      ),
+    );
   }
 
   Widget _buildGridItem({required String title, required String subtitle, required IconData icon}) {
@@ -190,7 +236,7 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
                   size: 40,
                   color: Colors.white,
                 ),
-                const SizedBox(height:20.0),
+                const SizedBox(height: 20.0),
                 Text(
                   title,
                   style: const TextStyle(
@@ -267,11 +313,9 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
     return Card(
       elevation: 10.0,
       child: Material(
-        
         color: Colors.blue[900],
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
-          
           borderRadius: BorderRadius.circular(10),
           onTap: () {
             if ('$title' == "Completed") {
@@ -296,7 +340,6 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
                 const SizedBox(height: 20.0),
                 Text(
                   title,
-                  
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -304,7 +347,7 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
                   ),
                 ),
                 Text(
-                  subtitle,
+                  title == "Earnings" ? "\₹${totalEarnings.toStringAsFixed(2)}" : subtitle,
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -326,18 +369,13 @@ Future<void> _showConfirmationDialog(BuildContext context, String title, String 
       "icon": Icons.people,
     },
     {
-      "title": "Categories",
-      "subtitle": "4",
-      "icon": Icons.category,
-    },
-    {
       "title": "Products",
       "subtitle": "Total Food Items",
       "icon": Icons.shopping_cart,
     },
     {
       "title": "Earnings",
-      "subtitle": "\$600",
+      "subtitle": "", // This will be dynamically updated
       "icon": Icons.attach_money,
     },
     {

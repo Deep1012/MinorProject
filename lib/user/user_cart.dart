@@ -3,6 +3,7 @@ import 'dart:io'; // Import for platform detection
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:campuscrave/database/database.dart';
@@ -249,29 +250,22 @@ class _OrderState extends State<Order> {
                             Row(
                               mainAxisSize: MainAxisSize.min, // Minimize the size of this row
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    // Decrement action
-                                  },
-                                  icon: Icon(Icons.remove),
-                                ),
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(ds["Quantity"]),
+                                
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: Text(ds["Quantity"]),
+                                    ),
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    // Increment action
-                                  },
-                                  icon: Icon(Icons.add),
-                                ),
+                                
                               ],
                             ),
                           ],
@@ -290,6 +284,8 @@ class _OrderState extends State<Order> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: isLoading || isOpen == null
           ? Center(child: CircularProgressIndicator())
@@ -299,8 +295,8 @@ class _OrderState extends State<Order> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 70,
+                      SizedBox(
+                        height: screenHeight  * 0.07,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
@@ -312,6 +308,15 @@ class _OrderState extends State<Order> {
                           ),
                         ),
                       ),
+                       Padding(
+                        padding: EdgeInsets.only(left : 20),
+                         child: Text(
+                          "If mistaken, swipe to delete and add again!!",
+                          style: AppWidget.LightTextFieldStyle(),
+                          overflow: TextOverflow.ellipsis,
+                                               ),
+                       ),
+                      SizedBox(height: screenHeight * 0.02,),
                       Container(
                         height: MediaQuery.of(context).size.height / 2,
                         child: foodCart(),
